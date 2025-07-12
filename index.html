@@ -3,46 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Tools - Ulepszony Interfejs</title>
+    <title>OSINT Tools - Zaawansowany Interfejs</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1><i class="fas fa-search-plus"></i> OSINT Tools</h1>
-            <p class="subtitle">Przejrzysty i intuicyjny zbiór narzędzi Open Source Intelligence</p>
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Wpisz nazwę narzędzia lub kategorii...">
-                <i class="fas fa-search"></i>
-            </div>
-        </div>
-    </header>
 
-    <div class="filter-container container">
-        <div class="filter-bar">
-            <div class="filter-group">
-                <label for="categoryFilter"><i class="fas fa-sitemap"></i> Wybierz kategorię:</label>
-                <select id="categoryFilter">
-                    <option value="all">Wszystkie Kategorie</option>
-                    </select>
+    <aside class="sidebar">
+        <h2 class="sidebar-title">Kategorie</h2>
+        <div class="category-tree-container" id="category-tree">
             </div>
-            <div id="resultsCount" class="results-count"></div>
-        </div>
+    </aside>
+
+    <div class="main-content">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <h1><i class="fas fa-search-plus"></i> OSINT Tools</h1>
+                    <button id="theme-switcher" class="theme-btn" aria-label="Zmień motyw">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <p class="subtitle">Zaawansowany zbiór narzędzi Open Source Intelligence</p>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Szukaj w setkach narzędzi...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+        </header>
+
+        <main class="container">
+            <section class="tools-grid">
+                </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2025 OSINT Tools. Aplikacja dynamicznie wczytująca narzędzia.</p>
+                <p class="disclaimer">Używaj tych narzędzi odpowiedzialnie i zgodnie z prawem.</p>
+            </div>
+        </footer>
     </div>
-
-    <main class="container">
-        <section class="tools-grid">
-            <div class="loader" id="loader"></div>
-            </section>
-    </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 OSINT Tools. Aplikacja dynamicznie wczytująca narzędzia.</p>
-            <p class="disclaimer">Używaj tych narzędzi odpowiedzialnie i zgodnie z prawem.</p>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
 </body>
