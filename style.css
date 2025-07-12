@@ -9,6 +9,8 @@
     --text-secondary: #94a3b8;
     --accent: #10b981;
     --border: #334155;
+    --highlight-bg: #facc15;
+    --highlight-text: #422006;
 }
 
 * {
@@ -33,7 +35,7 @@ body {
 /* Header */
 header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    padding: 3rem 0;
+    padding: 2.5rem 0;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -41,20 +43,14 @@ header {
 header h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
-    font-weight: 700;
 }
 
-header h1 i {
-    margin-right: 0.5rem;
-}
-
-.subtitle {
+header .subtitle {
     font-size: 1.2rem;
     color: rgba(255, 255, 255, 0.9);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
-/* Search Box */
 .search-box {
     position: relative;
     max-width: 500px;
@@ -85,115 +81,149 @@ header h1 i {
     color: var(--text-secondary);
 }
 
-/* Category Navigation */
-.category-nav {
+/* Nowy pasek filtrowania */
+.filter-container {
     background: var(--surface);
-    padding: 1rem 0;
-    overflow-x: auto;
+    padding: 1rem 20px;
     border-bottom: 1px solid var(--border);
     position: sticky;
     top: 0;
     z-index: 100;
 }
 
-.category-nav .container {
+.filter-bar {
     display: flex;
-    gap: 0.5rem;
-    min-width: fit-content;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
 }
 
-.category-btn {
-    padding: 0.5rem 1.5rem;
-    border: none;
-    border-radius: 25px;
-    background: transparent;
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.filter-group label {
+    font-size: 1rem;
     color: var(--text-secondary);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-    font-size: 0.95rem;
 }
 
-.category-btn:hover {
-    background: var(--surface-hover);
+#categoryFilter {
+    background-color: var(--surface-hover);
     color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.category-btn.active {
-    background: var(--primary-color);
-    color: white;
+#categoryFilter:hover {
+    border-color: var(--primary-color);
 }
 
-/* Main Content */
+.results-count {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+}
+
+/* Main Content & Grid */
 main {
-    padding: 3rem 0;
-    min-height: calc(100vh - 400px);
+    padding: 2rem 0;
 }
 
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 1.5rem;
 }
 
-/* Tool Cards */
+/* Wskaźnik ładowania */
+.loader {
+    grid-column: 1 / -1; /* Rozciągnij na całą szerokość siatki */
+    border: 5px solid var(--surface-hover);
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 5rem auto; /* Wyśrodkuj */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Karty narzędzi */
 .tool-card {
     background: var(--surface);
     border-radius: 12px;
     padding: 1.5rem;
     transition: all 0.3s ease;
     border: 1px solid var(--border);
-    opacity: 1;
-    transform: translateY(0);
+    display: flex;
+    flex-direction: column;
 }
 
 .tool-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     border-color: var(--primary-color);
-}
-
-.tool-card.hidden {
-    display: none;
 }
 
 .tool-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 1rem;
+    gap: 1rem;
 }
 
 .tool-header h3 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     color: var(--text-primary);
     display: flex;
     align-items: center;
+    gap: 0.75rem; /* Odstęp między ikoną a tekstem */
 }
 
 .tool-header h3 i {
-    margin-right: 0.5rem;
     color: var(--primary-color);
+    font-size: 1.1rem;
+    width: 20px; /* Stała szerokość dla wyrównania */
+    text-align: center;
 }
 
 .tool-category {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
     background: var(--background);
     padding: 0.25rem 0.75rem;
     border-radius: 15px;
+    flex-shrink: 0; /* Zapobiega zawijaniu się tekstu */
+    white-space: nowrap;
 }
 
 .tool-description {
     color: var(--text-secondary);
     margin-bottom: 1.5rem;
-    line-height: 1.6;
+    flex-grow: 1; /* Rozciąga opis, aby przyciski były na dole */
+}
+
+/* Podświetlenie wyszukiwania */
+.tool-description mark, .tool-header h3 mark {
+    background-color: var(--highlight-bg);
+    color: var(--highlight-text);
+    padding: 0 2px;
+    border-radius: 3px;
 }
 
 .tool-links {
     display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap; /* Added for better responsiveness */
 }
 
 .tool-link {
@@ -214,14 +244,6 @@ main {
     transform: translateY(-2px);
 }
 
-.tool-link.secondary {
-    background: var(--surface-hover);
-}
-
-.tool-link.secondary:hover {
-    background: var(--accent);
-}
-
 /* Footer */
 footer {
     background: var(--surface);
@@ -229,54 +251,4 @@ footer {
     text-align: center;
     border-top: 1px solid var(--border);
     margin-top: 4rem;
-}
-
-footer p {
-    color: var(--text-secondary);
-    margin: 0.5rem 0;
-}
-
-.disclaimer {
-    font-size: 0.9rem;
-    font-style: italic;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    .subtitle {
-        font-size: 1rem;
-    }
-    
-    .tools-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .category-nav {
-        padding: 0.75rem 0;
-    }
-    
-    .category-btn {
-        padding: 0.4rem 1rem;
-        font-size: 0.85rem;
-    }
-}
-
-/* Animacje */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.tool-card {
-    animation: fadeIn 0.5s ease-out;
 }
