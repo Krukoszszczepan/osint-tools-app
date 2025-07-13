@@ -3,50 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Tools - Zaawansowany Interfejs</title>
+    <title>OSINT Tools - Nowoczesna Baza Narzędzi</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
 <body>
 
-    <button id="open-map-btn" class="open-map-btn" aria-label="Pokaż kategorie">
-        <i class="fas fa-sitemap"></i> Kategorie
-    </button>
-    
-    <div id="mindmap-container" class="mindmap-container">
-        <button id="close-map-btn" class="close-map-btn" aria-label="Zamknij kategorie">&times;</button>
-        <div id="mindmap-root"></div>
-    </div>
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-sitemap"></i> Kategorie</h3>
+        </div>
+        <div id="mindmap-root" class="mindmap-root">
+            </div>
+    </aside>
 
     <div class="main-content">
-        <header>
-            <div class="container">
-                <div class="header-content">
-                    <h1><i class="fas fa-search-plus"></i> OSINT Tools</h1>
-                    <button id="theme-switcher" class="theme-btn" aria-label="Zmień motyw">
-                        <i class="fas fa-sun"></i>
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </div>
-                <p class="subtitle">Interaktywny zbiór narzędzi Open Source Intelligence</p>
+        <header class="main-header">
+            <div class="header-container">
+                <button id="mobile-menu-btn" class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Filtruj widoczne narzędzia...">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Szukaj w ponad 1600 narzędziach...">
                 </div>
+                <button id="theme-switcher" class="theme-btn" aria-label="Zmień motyw">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </header>
 
-        <main class="container">
-            <h2 id="current-category-title" class="current-category-title">Wszystkie narzędzia</h2>
+        <main class="content-area">
+            <div class="content-header">
+                <h1 id="current-category-title">Wszystkie narzędzia</h1>
+                <p id="tool-count" class="tool-count"></p>
+            </div>
             <section id="tools-grid" class="tools-grid">
                 </section>
         </main>
-
-        <footer>
-            <div class="container">
-                <p>&copy; 2025 OSINT Tools. Projekt i realizacja: Szczepan Krukosz.</p>
-                <p class="disclaimer">Używaj tych narzędzi odpowiedzialnie i zgodnie z prawem.</p>
-            </div>
-        </footer>
     </div>
 
     <script src="script.js"></script>
