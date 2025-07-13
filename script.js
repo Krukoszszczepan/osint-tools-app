@@ -1,25 +1,21 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // --- Referencje do elementów DOM ---
+    // --- Elementy DOM ---
     const searchInput = document.getElementById('searchInput');
     const toolGrid = document.getElementById('tools-grid');
-    const mindmapContainer = document.getElementById('mindmap-container');
     const mindmapRoot = document.getElementById('mindmap-root');
     const themeSwitcher = document.getElementById('theme-switcher');
-    const body = document.body;
-    const openMapBtn = document.getElementById('open-map-btn');
-    const closeMapBtn = document.getElementById('close-map-btn');
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const sidebar = document.getElementById('sidebar');
     const categoryTitle = document.getElementById('current-category-title');
+    const toolCount = document.getElementById('tool-count');
+    const body = document.body;
 
     let allTools = [];
-    let categoryColors = {};
-    const colorPalette = [
-        '#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', 
-        '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16'
-    ];
+    const colorPalette = ['#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
+    const categoryColors = {};
     let colorIndex = 0;
 
-    // --- 1. FUNKCJE POMOCNICZE (MOTYW, KOLORY) ---
-
+    // --- Inicjalizacja i Motywy ---
     (function applyInitialTheme() {
         const savedTheme = localStorage.getItem('theme') || 'dark';
         if (savedTheme === 'light') body.classList.add('light-theme');
@@ -30,21 +26,25 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
     });
 
+    mobileMenuBtn.addEventListener('click', () => sidebar.classList.toggle('is-open'));
+
     function getColorForCategory(categorySlug) {
         if (!categoryColors[categorySlug]) {
-            categoryColors[categorySlug] = colorPalette[colorIndex % colorPalette.length];
-            colorIndex++;
+            categoryColors[categorySlug] = colorPalette[colorIndex++ % colorPalette.length];
         }
         return categoryColors[categorySlug];
     }
-    
-    // --- 2. GENEROWANIE KART NARZĘDZI ---
 
-    function generateToolCard(tool, accentColor) {
+    // --- Generowanie dynamicznych elementów ---
+    function generateToolCard(tool) {
+        const color = getColorForCategory(tool.category_slug);
         return `
-            <div class="tool-card" style="--card-accent-color: ${accentColor};">
-                <h3>${tool.name}</h3>
-                <p class="tool-description">${tool.description}</p>
+            <div class="tool-card">
+                <div>
+                    <h3>${tool.name}</h3>
+                    <p class="tool-category" style="--card-accent-color: ${color};">${tool.category}</p>
+                    <p class="tool-description">${tool.description}</p>
+                </div>
                 <a href="${tool.url}" target="_blank" class="tool-link">
                     <i class="fas fa-external-link-alt"></i> Otwórz
                 </a>
@@ -52,37 +52,29 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     }
 
-    function renderTools(tools, activeCategorySlug) {
-        if (tools.length === 0) {
-            toolGrid.innerHTML = '<p class="no-results">Brak narzędzi pasujących do kryteriów.</p>';
-        } else {
-            const accentColor = activeCategorySlug === 'all' ? '#94a3b8' : getColorForCategory(activeCategorySlug);
-            toolGrid.innerHTML = tools.map(tool => generateToolCard(tool, accentColor)).join('');
-        }
-    }
-
-    // --- 3. GENEROWANIE I OBSŁUGA MAPY MYŚLI ---
-
-    function buildMindmapNode(item, isRoot = false) {
+    function buildMindmapNode(item) {
         const node = document.createElement('div');
         node.className = 'mindmap-node';
-        if (isRoot) node.classList.add('is-root');
 
         const content = document.createElement('div');
         content.className = 'node-content';
-        content.textContent = item.name;
-        content.style.borderColor = item.color;
         node.appendChild(content);
 
         if (item.children && item.children.length > 0) {
+            // Węzeł rozwijany (Super-kategoria)
+            content.classList.add('is-expandable');
+            content.innerHTML = `<i class="fas fa-angle-right"></i> ${item.name}`;
             const childrenContainer = document.createElement('div');
             childrenContainer.className = 'node-children';
-            item.children.forEach(child => childrenContainer.appendChild(buildMindmapNode(child)));
+            const innerDiv = document.createElement('div'); // Potrzebne do animacji grid
+            item.children.forEach(child => innerDiv.appendChild(buildMindmapNode(child)));
+            childrenContainer.appendChild(innerDiv);
             node.appendChild(childrenContainer);
-            
+
             content.addEventListener('click', () => node.classList.toggle('is-expanded'));
         } else {
-            // To jest liść (kategoria końcowa)
+            // Liść (Kategoria końcowa)
+            content.textContent = item.name;
             content.dataset.categorySlug = item.slug;
             content.dataset.categoryName = item.name;
             content.addEventListener('click', handleCategorySelection);
@@ -91,26 +83,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateMindmap(tools) {
-        const superCategories = {
-            'Wyszukiwanie Osób': ['username', 'email', 'people', 'osoby', 'person', 'phone', 'numer-telefonu'],
-            'Analiza Techniczna': ['domain', 'ip', 'dns', 'adresy-ip', 'siec', 'malware', 'exploit', 'vulnerabilities'],
+        const superCategoriesConfig = {
+            'Wyszukiwanie Osób': ['username', 'email', 'people', 'osoby', 'person', 'phone'],
+            'Analiza Techniczna': ['domain', 'ip', 'dns', 'siec', 'malware', 'exploit', 'vulnerabilities'],
             'Obrazy i Media': ['image', 'video', 'obrazy', 'wideo', 'maps', 'mapy', 'geolokalizacja', 'metadata'],
             'Biznes i Instytucje': ['business', 'firmy', 'rejestry', 'finanse', 'dane-publiczne', 'government'],
             'Transport i Komunikacja': ['transport', 'lotnictwo', 'morski', 'pociagi', 'samochody', 'flight'],
             'Inne Narzędzia': []
         };
-
-        const categoryTree = { name: 'Wszystkie Kategorie', slug: 'all', children: [] };
-        const superCatMap = new Map();
-
-        // Stwórz super-kategorie
-        Object.keys(superCategories).forEach(scName => {
-            const superCatNode = { name: scName, slug: scName.toLowerCase().replace(/\s/g, '-'), children: [] };
-            categoryTree.children.push(superCatNode);
-            superCatMap.set(scName, superCatNode);
-        });
-
-        // Grupuj kategorie
+        
+        const superCatMap = new Map(Object.keys(superCategoriesConfig).map(scName => [scName, { name: scName, children: [] }]));
+        
         const uniqueCategories = new Map();
         tools.forEach(tool => {
             if (!uniqueCategories.has(tool.category_slug)) {
@@ -120,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         uniqueCategories.forEach(cat => {
             let assigned = false;
-            for (const [scName, keywords] of Object.entries(superCategories)) {
+            for (const [scName, keywords] of Object.entries(superCategoriesConfig)) {
                 if (keywords.some(kw => cat.slug.includes(kw))) {
                     superCatMap.get(scName).children.push(cat);
                     assigned = true;
@@ -129,91 +112,73 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (!assigned) superCatMap.get('Inne Narzędzia').children.push(cat);
         });
-
-        // Sortuj i czyść
-        categoryTree.children.forEach(sc => {
-            sc.children.sort((a, b) => a.name.localeCompare(b.name));
-        });
-
+        
         // Dodaj korzeń "Wszystkie"
-        const allNode = { name: 'Pokaż Wszystkie', slug: 'all' };
-        mindmapRoot.appendChild(buildMindmapNode(allNode, true));
-
+        const allNode = buildMindmapNode({ name: 'Wszystkie narzędzia', slug: 'all' });
+        allNode.querySelector('.node-content').classList.add('is-active'); // Aktywny domyślnie
+        mindmapRoot.appendChild(allNode);
+        
         // Buduj resztę drzewa
-        categoryTree.children.forEach(superCat => {
-            if(superCat.children.length > 0) {
-                 mindmapRoot.appendChild(buildMindmapNode(superCat));
+        superCatMap.forEach(superCat => {
+            if (superCat.children.length > 0) {
+                superCat.children.sort((a, b) => a.name.localeCompare(b.name));
+                mindmapRoot.appendChild(buildMindmapNode(superCat));
             }
         });
     }
 
-    // --- 4. LOGIKA APLIKACJI (FILTROWANIE, ZDARZENIA) ---
-    
+    // --- Logika Aplikacji ---
     function handleCategorySelection(event) {
         const target = event.currentTarget;
-        const slug = target.dataset.categorySlug;
-        const name = target.dataset.categoryName || "Wszystkie narzędzia";
+        document.querySelectorAll('.node-content.is-active').forEach(n => n.classList.remove('is-active'));
+        target.classList.add('is-active');
         
-        document.querySelectorAll('.mindmap-node.is-active').forEach(n => n.classList.remove('is-active'));
-        target.closest('.mindmap-node').classList.add('is-active');
-
-        categoryTitle.textContent = name;
-        filterAndDisplayTools();
-
-        if (window.innerWidth < 1024) {
-            mindmapContainer.classList.remove('is-open');
-            body.classList.remove('map-is-open');
+        if (window.innerWidth <= 1024) {
+            sidebar.classList.remove('is-open');
         }
+        
+        filterAndDisplayTools();
     }
 
     function filterAndDisplayTools() {
         const searchTerm = searchInput.value.toLowerCase().trim();
-        const activeNode = document.querySelector('.mindmap-node.is-active .node-content');
-        const activeCategory = activeNode ? activeNode.dataset.categorySlug : 'all';
+        const activeNode = document.querySelector('.node-content.is-active');
+        const activeCategorySlug = activeNode.dataset.categorySlug;
+        const activeCategoryName = activeNode.dataset.categoryName || activeNode.textContent;
 
-        const toolsToDisplay = allTools.filter(tool => {
-            const matchesCategory = activeCategory === 'all' || tool.category_slug === activeCategory;
-            const matchesSearch = searchTerm === '' || 
-                                  tool.name.toLowerCase().includes(searchTerm) ||
-                                  tool.description.toLowerCase().includes(searchTerm);
+        const filteredTools = allTools.filter(tool => {
+            const matchesCategory = activeCategorySlug === 'all' || tool.category_slug === activeCategorySlug;
+            const matchesSearch = searchTerm === '' ||
+                tool.name.toLowerCase().includes(searchTerm) ||
+                tool.description.toLowerCase().includes(searchTerm) ||
+                tool.category.toLowerCase().includes(searchTerm);
             return matchesCategory && matchesSearch;
         });
+
+        categoryTitle.textContent = activeCategoryName;
+        toolCount.textContent = `${filteredTools.length} narzędzi`;
         
-        renderTools(toolsToDisplay, activeCategory);
-    }
-    
-    function setupEventListeners() {
-        searchInput.addEventListener('input', filterAndDisplayTools);
-        
-        openMapBtn.addEventListener('click', () => {
-            mindmapContainer.classList.add('is-open');
-            body.classList.add('map-is-open');
-        });
-        
-        closeMapBtn.addEventListener('click', () => {
-            mindmapContainer.classList.remove('is-open');
-            body.classList.remove('map-is-open');
-        });
+        if (filteredTools.length > 0) {
+            toolGrid.innerHTML = filteredTools.map(generateToolCard).join('');
+        } else {
+            toolGrid.innerHTML = '<p class="no-results">😢 Brak wyników dla podanych kryteriów.</p>';
+        }
     }
 
-    // --- 5. INICJALIZACJA ---
-
+    // --- Inicjalizacja Aplikacji ---
     async function initializeApp() {
         try {
             const response = await fetch('database.json');
-            if (!response.ok) throw new Error(`Błąd wczytywania bazy: ${response.statusText}`);
+            if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
             allTools = await response.json();
             
             generateMindmap(allTools);
+            filterAndDisplayTools(); // Wyświetl wszystko na starcie
             
-            // Domyślnie zaznacz "Wszystkie"
-            document.querySelector('.mindmap-node.is-root').classList.add('is-active');
-            filterAndDisplayTools();
-            
-            setupEventListeners();
+            searchInput.addEventListener('input', filterAndDisplayTools);
         } catch (error) {
             console.error("Błąd inicjalizacji aplikacji:", error);
-            toolGrid.innerHTML = '<p class="no-results" style="color: #ef4444;">Nie można załadować bazy narzędzi. Sprawdź konsolę, aby uzyskać więcej informacji.</p>';
+            toolGrid.innerHTML = '<p class="no-results">Wystąpił krytyczny błąd podczas ładowania narzędzi.</p>';
         }
     }
 
