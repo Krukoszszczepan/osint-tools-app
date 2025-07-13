@@ -1,37 +1,34 @@
 document.addEventListener('DOMContentLoaded', function () {
     // --- Referencje do elementów DOM ---
     const searchInput = document.getElementById('searchInput');
-    const toolGrid = document.querySelector('.tools-grid');
-    const categoryTreeContainer = document.getElementById('category-tree');
+    const toolGrid = document.getElementById('tools-grid');
+    const mindmapContainer = document.getElementById('mindmap-container');
+    const mindmapRoot = document.getElementById('mindmap-root');
     const themeSwitcher = document.getElementById('theme-switcher');
     const body = document.body;
+    const openMapBtn = document.getElementById('open-map-btn');
+    const closeMapBtn = document.getElementById('close-map-btn');
+    const categoryTitle = document.getElementById('current-category-title');
 
-    let allTools = []; // Przechowuje wszystkie narzędzia po wczytaniu
-
-    // --- 1. OBSŁUGA MOTYWU (JASNY/CIEMNY) ---
-
-    // Funkcja do natychmiastowego zastosowania motywu, aby uniknąć "mrugania"
-    (function applyInitialTheme() {
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        if (savedTheme === 'light') {
-            body.classList.add('light-theme');
-        }
-    })();
-
-    themeSwitcher.addEventListener('click', () => {
-        body.classList.toggle('light-theme');
-        const currentTheme = body.classList.contains('light-theme') ? 'light' : 'dark';
-        localStorage.setItem('theme', currentTheme);
-    });
-
-    // --- 2. KODOWANIE KOLORAMI KATEGORII ---
-
-    const categoryColors = {};
+    let allTools = [];
+    let categoryColors = {};
     const colorPalette = [
         '#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', 
         '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16'
     ];
     let colorIndex = 0;
+
+    // --- 1. FUNKCJE POMOCNICZE (MOTYW, KOLORY) ---
+
+    (function applyInitialTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') body.classList.add('light-theme');
+    })();
+
+    themeSwitcher.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
 
     function getColorForCategory(categorySlug) {
         if (!categoryColors[categorySlug]) {
@@ -40,116 +37,166 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         return categoryColors[categorySlug];
     }
+    
+    // --- 2. GENEROWANIE KART NARZĘDZI ---
 
-    // --- 3. GENEROWANIE DRZEWA KATEGORII I KART NARZĘDZI ---
-
-    /** Tworzy kod HTML dla pojedynczej karty narzędzia */
-    function generateToolCard(tool) {
-        const accentColor = getColorForCategory(tool.category_slug);
+    function generateToolCard(tool, accentColor) {
         return `
             <div class="tool-card" style="--card-accent-color: ${accentColor};">
-                <div class="tool-header">
-                    <h3><i class="fas fa-wrench"></i> ${tool.name}</h3>
-                    <span class="tool-category">${tool.category}</span>
-                </div>
+                <h3>${tool.name}</h3>
                 <p class="tool-description">${tool.description}</p>
-                <div class="tool-links">
-                    <a href="${tool.url}" target="_blank" class="tool-link">
-                        <i class="fas fa-external-link-alt"></i> Otwórz
-                    </a>
-                </div>
+                <a href="${tool.url}" target="_blank" class="tool-link">
+                    <i class="fas fa-external-link-alt"></i> Otwórz
+                </a>
             </div>
         `;
     }
 
-    /** Wyświetla narzędzia w siatce */
-    function renderTools(tools) {
+    function renderTools(tools, activeCategorySlug) {
         if (tools.length === 0) {
-            toolGrid.innerHTML = '<p class="no-results" style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">Brak wyników.</p>';
+            toolGrid.innerHTML = '<p class="no-results">Brak narzędzi pasujących do kryteriów.</p>';
         } else {
-            toolGrid.innerHTML = tools.map(generateToolCard).join('');
+            const accentColor = activeCategorySlug === 'all' ? '#94a3b8' : getColorForCategory(activeCategorySlug);
+            toolGrid.innerHTML = tools.map(tool => generateToolCard(tool, accentColor)).join('');
         }
     }
 
-    /** Generuje rozwijane drzewo kategorii */
-    function generateCategoryTree(tools) {
-        // Stworzenie prostego grupowania na podstawie słów kluczowych
+    // --- 3. GENEROWANIE I OBSŁUGA MAPY MYŚLI ---
+
+    function buildMindmapNode(item, isRoot = false) {
+        const node = document.createElement('div');
+        node.className = 'mindmap-node';
+        if (isRoot) node.classList.add('is-root');
+
+        const content = document.createElement('div');
+        content.className = 'node-content';
+        content.textContent = item.name;
+        content.style.borderColor = item.color;
+        node.appendChild(content);
+
+        if (item.children && item.children.length > 0) {
+            const childrenContainer = document.createElement('div');
+            childrenContainer.className = 'node-children';
+            item.children.forEach(child => childrenContainer.appendChild(buildMindmapNode(child)));
+            node.appendChild(childrenContainer);
+            
+            content.addEventListener('click', () => node.classList.toggle('is-expanded'));
+        } else {
+            // To jest liść (kategoria końcowa)
+            content.dataset.categorySlug = item.slug;
+            content.dataset.categoryName = item.name;
+            content.addEventListener('click', handleCategorySelection);
+        }
+        return node;
+    }
+
+    function generateMindmap(tools) {
         const superCategories = {
             'Wyszukiwanie Osób': ['username', 'email', 'people', 'osoby', 'person', 'phone', 'numer-telefonu'],
-            'Analiza Techniczna': ['domain', 'ip', 'dns', 'adresy-ip', 'siec', 'malware', 'exploit'],
-            'Obrazy i Media': ['image', 'video', 'obrazy', 'wideo', 'maps', 'mapy', 'geolokalizacja'],
-            'Biznes i Instytucje': ['business', 'firmy', 'rejestry', 'finanse', 'dane-publiczne'],
-            'Transport i Komunikacja': ['transport', 'lotnictwo', 'morski', 'pociagi', 'samochody'],
-            'Inne Narzędzia': [] // Domyślna grupa
+            'Analiza Techniczna': ['domain', 'ip', 'dns', 'adresy-ip', 'siec', 'malware', 'exploit', 'vulnerabilities'],
+            'Obrazy i Media': ['image', 'video', 'obrazy', 'wideo', 'maps', 'mapy', 'geolokalizacja', 'metadata'],
+            'Biznes i Instytucje': ['business', 'firmy', 'rejestry', 'finanse', 'dane-publiczne', 'government'],
+            'Transport i Komunikacja': ['transport', 'lotnictwo', 'morski', 'pociagi', 'samochody', 'flight'],
+            'Inne Narzędzia': []
         };
 
-        const categoryGroups = {};
+        const categoryTree = { name: 'Wszystkie Kategorie', slug: 'all', children: [] };
+        const superCatMap = new Map();
+
+        // Stwórz super-kategorie
+        Object.keys(superCategories).forEach(scName => {
+            const superCatNode = { name: scName, slug: scName.toLowerCase().replace(/\s/g, '-'), children: [] };
+            categoryTree.children.push(superCatNode);
+            superCatMap.set(scName, superCatNode);
+        });
+
+        // Grupuj kategorie
         const uniqueCategories = new Map();
         tools.forEach(tool => {
             if (!uniqueCategories.has(tool.category_slug)) {
-                uniqueCategories.set(tool.category_slug, tool.category);
+                uniqueCategories.set(tool.category_slug, { name: tool.category, slug: tool.category_slug });
             }
         });
-        
-        // Przypisanie każdej unikalnej kategorii do super-kategorii
-        uniqueCategories.forEach((name, slug) => {
-            let found = false;
-            for (const superCat in superCategories) {
-                if (superCategories[superCat].some(keyword => slug.includes(keyword))) {
-                    if (!categoryGroups[superCat]) categoryGroups[superCat] = [];
-                    categoryGroups[superCat].push({ name, slug });
-                    found = true;
+
+        uniqueCategories.forEach(cat => {
+            let assigned = false;
+            for (const [scName, keywords] of Object.entries(superCategories)) {
+                if (keywords.some(kw => cat.slug.includes(kw))) {
+                    superCatMap.get(scName).children.push(cat);
+                    assigned = true;
                     break;
                 }
             }
-            if (!found) {
-                if (!categoryGroups['Inne Narzędzia']) categoryGroups['Inne Narzędzia'] = [];
-                categoryGroups['Inne Narzędzia'].push({ name, slug });
-            }
+            if (!assigned) superCatMap.get('Inne Narzędzia').children.push(cat);
         });
 
-        // Generowanie HTML dla drzewa
-        let treeHtml = `<div class="category-tree"><a href="#" class="category-item active" data-category="all">Wszystkie</a>`;
-        for (const superCat in categoryGroups) {
-            treeHtml += `<details><summary>${superCat}</summary>`;
-            categoryGroups[superCat].sort((a,b) => a.name.localeCompare(b.name)).forEach(cat => {
-                treeHtml += `<a href="#" class="category-item" data-category="${cat.slug}">${cat.name}</a>`;
-            });
-            treeHtml += `</details>`;
-        }
-        treeHtml += `</div>`;
-        categoryTreeContainer.innerHTML = treeHtml;
+        // Sortuj i czyść
+        categoryTree.children.forEach(sc => {
+            sc.children.sort((a, b) => a.name.localeCompare(b.name));
+        });
 
-        setupCategoryClickListeners();
+        // Dodaj korzeń "Wszystkie"
+        const allNode = { name: 'Pokaż Wszystkie', slug: 'all' };
+        mindmapRoot.appendChild(buildMindmapNode(allNode, true));
+
+        // Buduj resztę drzewa
+        categoryTree.children.forEach(superCat => {
+            if(superCat.children.length > 0) {
+                 mindmapRoot.appendChild(buildMindmapNode(superCat));
+            }
+        });
     }
 
-    // --- LOGIKA FILTROWANIA I OBSŁUGA ZDARZEŃ ---
+    // --- 4. LOGIKA APLIKACJI (FILTROWANIE, ZDARZENIA) ---
+    
+    function handleCategorySelection(event) {
+        const target = event.currentTarget;
+        const slug = target.dataset.categorySlug;
+        const name = target.dataset.categoryName || "Wszystkie narzędzia";
+        
+        document.querySelectorAll('.mindmap-node.is-active').forEach(n => n.classList.remove('is-active'));
+        target.closest('.mindmap-node').classList.add('is-active');
+
+        categoryTitle.textContent = name;
+        filterAndDisplayTools();
+
+        if (window.innerWidth < 1024) {
+            mindmapContainer.classList.remove('is-open');
+            body.classList.remove('map-is-open');
+        }
+    }
 
     function filterAndDisplayTools() {
         const searchTerm = searchInput.value.toLowerCase().trim();
-        const activeCategory = document.querySelector('.category-item.active').dataset.category;
+        const activeNode = document.querySelector('.mindmap-node.is-active .node-content');
+        const activeCategory = activeNode ? activeNode.dataset.categorySlug : 'all';
 
-        const filteredTools = allTools.filter(tool => {
-            const matchesSearch = searchTerm === '' || tool.name.toLowerCase().includes(searchTerm);
+        const toolsToDisplay = allTools.filter(tool => {
             const matchesCategory = activeCategory === 'all' || tool.category_slug === activeCategory;
-            return matchesSearch && matchesCategory;
+            const matchesSearch = searchTerm === '' || 
+                                  tool.name.toLowerCase().includes(searchTerm) ||
+                                  tool.description.toLowerCase().includes(searchTerm);
+            return matchesCategory && matchesSearch;
         });
-        renderTools(filteredTools);
+        
+        renderTools(toolsToDisplay, activeCategory);
     }
     
-    function setupCategoryClickListeners() {
-        const categoryItems = document.querySelectorAll('.category-item');
-        categoryItems.forEach(item => {
-            item.addEventListener('click', function (e) {
-                e.preventDefault();
-                categoryItems.forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-                filterAndDisplayTools();
-            });
+    function setupEventListeners() {
+        searchInput.addEventListener('input', filterAndDisplayTools);
+        
+        openMapBtn.addEventListener('click', () => {
+            mindmapContainer.classList.add('is-open');
+            body.classList.add('map-is-open');
+        });
+        
+        closeMapBtn.addEventListener('click', () => {
+            mindmapContainer.classList.remove('is-open');
+            body.classList.remove('map-is-open');
         });
     }
 
-    // --- INICJALIZACJA APLIKACJI ---
+    // --- 5. INICJALIZACJA ---
 
     async function initializeApp() {
         try {
@@ -157,13 +204,16 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) throw new Error(`Błąd wczytywania bazy: ${response.statusText}`);
             allTools = await response.json();
             
-            generateCategoryTree(allTools);
-            renderTools(allTools);
+            generateMindmap(allTools);
             
-            searchInput.addEventListener('input', filterAndDisplayTools);
+            // Domyślnie zaznacz "Wszystkie"
+            document.querySelector('.mindmap-node.is-root').classList.add('is-active');
+            filterAndDisplayTools();
+            
+            setupEventListeners();
         } catch (error) {
             console.error("Błąd inicjalizacji aplikacji:", error);
-            toolGrid.innerHTML = '<p class="error" style="color: #ef4444;">Nie można załadować narzędzi.</p>';
+            toolGrid.innerHTML = '<p class="no-results" style="color: #ef4444;">Nie można załadować bazy narzędzi. Sprawdź konsolę, aby uzyskać więcej informacji.</p>';
         }
     }
 
