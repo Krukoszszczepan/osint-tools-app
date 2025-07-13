@@ -27,7 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Funkcje Pomocnicze (LocalStorage, itp.) ---
     const ls = {
-        get: (key, fallback) => JSON.parse(localStorage.getItem(key)) || fallback,
+        get: (key, fallback) => {
+            const value = localStorage.getItem(key);
+            // POPRAWKA: Najpierw sprawdzamy, czy wartość istnieje, a dopiero potem parsujemy.
+            return value != null ? JSON.parse(value) : fallback;
+        },
         set: (key, value) => localStorage.setItem(key, JSON.stringify(value)),
     };
     const getFavorites = () => ls.get('favorites', []);
@@ -226,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return acc;
         }, {});
         const sortedCategories = Object.entries(categoryCounts).sort(([, a], [, b]) => b - a);
-        const maxCount = sortedCategories[0][1];
+        const maxCount = sortedCategories.length > 0 ? sortedCategories[0][1] : 1;
 
         let statsHTML = `<div class="stats-container"><h3>Narzędzia wg kategorii</h3>`;
         sortedCategories.forEach(([name, count]) => {
@@ -288,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function showRandomTool() {
+        if (allTools.length === 0) return;
         const randomTool = allTools[Math.floor(Math.random() * allTools.length)];
         dom.modalBody.innerHTML = generateToolCard(randomTool);
         dom.modalContainer.classList.add('is-open');
