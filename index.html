@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Tools - Nowoczesna Baza Narzędzi</title>
+    <title>OSINT Tools - Kompletna Baza Narzędzi</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,6 +17,9 @@
     <aside id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h3><i class="fas fa-sitemap"></i> Kategorie</h3>
+            <button id="random-tool-btn" class="sidebar-action-btn" title="Odkryj losowe narzędzie">
+                <i class="fas fa-dice"></i>
+            </button>
         </div>
         <div id="mindmap-root" class="mindmap-root">
             </div>
@@ -39,16 +42,41 @@
             </div>
         </header>
 
-        <main class="content-area">
+        <main id="content-area" class="content-area">
             <div class="content-header">
                 <h1 id="current-category-title">Wszystkie narzędzia</h1>
-                <p id="tool-count" class="tool-count"></p>
+                <div class="header-controls">
+                    <span id="tool-count" class="tool-count"></span>
+                    <div class="view-switcher">
+                        <button id="view-grid-btn" class="view-btn active" title="Widok siatki"><i class="fas fa-th-large"></i></button>
+                        <button id="view-list-btn" class="view-btn" title="Widok listy"><i class="fas fa-th-list"></i></button>
+                    </div>
+                </div>
             </div>
-            <section id="tools-grid" class="tools-grid">
+            <section id="tools-container" class="tools-grid">
                 </section>
         </main>
     </div>
 
+    <div id="modal-container" class="modal-container">
+        <div class="modal-content">
+            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"),
+                s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/YOUR_WIDGET_ID';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
