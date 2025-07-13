@@ -9,11 +9,14 @@
 </head>
 <body>
 
-    <aside class="sidebar">
-        <h2 class="sidebar-title">Kategorie</h2>
-        <div class="category-tree-container" id="category-tree">
-            </div>
-    </aside>
+    <button id="open-map-btn" class="open-map-btn" aria-label="Pokaż kategorie">
+        <i class="fas fa-sitemap"></i> Kategorie
+    </button>
+    
+    <div id="mindmap-container" class="mindmap-container">
+        <button id="close-map-btn" class="close-map-btn" aria-label="Zamknij kategorie">&times;</button>
+        <div id="mindmap-root"></div>
+    </div>
 
     <div class="main-content">
         <header>
@@ -25,22 +28,22 @@
                         <i class="fas fa-moon"></i>
                     </button>
                 </div>
-                <p class="subtitle">Zaawansowany zbiór narzędzi Open Source Intelligence</p>
+                <p class="subtitle">Interaktywny zbiór narzędzi Open Source Intelligence</p>
                 <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Szukaj w setkach narzędzi...">
-                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Filtruj widoczne narzędzia...">
                 </div>
             </div>
         </header>
 
         <main class="container">
-            <section class="tools-grid">
+            <h2 id="current-category-title" class="current-category-title">Wszystkie narzędzia</h2>
+            <section id="tools-grid" class="tools-grid">
                 </section>
         </main>
 
         <footer>
             <div class="container">
-                <p>&copy; 2025 OSINT Tools. Aplikacja dynamicznie wczytująca narzędzia.</p>
+                <p>&copy; 2025 OSINT Tools. Projekt i realizacja: Szczepan Krukosz.</p>
                 <p class="disclaimer">Używaj tych narzędzi odpowiedzialnie i zgodnie z prawem.</p>
             </div>
         </footer>
