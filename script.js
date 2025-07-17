@@ -29,8 +29,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const ls = {
         get: (key, fallback) => {
             const value = localStorage.getItem(key);
-            // POPRAWKA: Najpierw sprawdzamy, czy wartość istnieje, a dopiero potem parsujemy.
-            return value != null ? JSON.parse(value) : fallback;
+            if (value == null) {
+                return fallback;
+            }
+            try {
+                // Najpierw spróbuj sparsować jako JSON (dla list, obiektów itp.)
+                return JSON.parse(value);
+            } catch (e) {
+                // Jeśli się nie uda, zwróć wartość jako zwykły tekst (dla motywu, widoku itp.)
+                return value;
+            }
         },
         set: (key, value) => localStorage.setItem(key, JSON.stringify(value)),
     };
@@ -38,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const getRatings = () => ls.get('ratings', {});
     const getClickCounts = () => ls.get('clickCounts', {});
     const getViewMode = () => ls.get('viewMode', 'grid');
-    
+
     // --- Inicjalizacja Podstawowych Funkcji (Motyw, Widok) ---
     (() => {
         // Motyw
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
         dom.modalCloseBtn.addEventListener('click', () => dom.modalContainer.classList.remove('is-open'));
         dom.randomToolBtn.addEventListener('click', showRandomTool);
     })();
-    
+
     function switchView(mode) {
         dom.toolsContainer.className = `tools-${mode}`;
         dom.viewGridBtn.classList.toggle('active', mode === 'grid');
