@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Stan aplikacji i dane ---
     let allTools = [];
-    const colorPalette = ['#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', ' #ec4899', '#14b8a6', '#f97316'];
+    const colorPalette = ['#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
     const categoryColors = {};
     let colorIndex = 0;
 
@@ -30,11 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         get: (key, fallback) => {
             const value = localStorage.getItem(key);
             if (value == null) return fallback;
-            try {
-                return JSON.parse(value);
-            } catch (e) {
-                return value;
-            }
+            try { return JSON.parse(value); } catch (e) { return value; }
         },
         set: (key, value) => localStorage.setItem(key, JSON.stringify(value)),
     };
@@ -42,6 +38,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const getRatings = () => ls.get('ratings', {});
     const getClickCounts = () => ls.get('clickCounts', {});
     const getViewMode = () => ls.get('viewMode', 'grid');
+    // NOWOŚĆ: Stan rozwinięcia super-grup
+    const getExpandedSuperGroups = () => ls.get('expandedSuperGroups', ['DZIEDZINY OSINT']);
+
     const highlightText = (text, searchTerm) => {
         if (!searchTerm) return text;
         const regex = new RegExp(`(${searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
@@ -111,25 +110,23 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>`;
     }
     
-    // ZMIANA: Dodano obsługę ikony dla nadkategorii
     function buildMindmapNode(item, isSpecial = false, count = 0, accentColor = null) {
         const node = document.createElement('div');
         node.className = 'mindmap-node';
         if (accentColor) {
             node.style.setProperty('--node-accent-color', accentColor);
         }
-        
         const content = document.createElement('div');
         content.className = 'node-content';
         node.appendChild(content);
 
         const countSpan = count > 0 ? `<span class="node-count">(${count})</span>` : '';
-        const itemIcon = item.icon ? `<i class="${item.icon}"></i>` : '';
-        const nameAndCount = `<span>${itemIcon}${item.name}</span>${countSpan}`;
+        // ZMIANA: Usunięto ikonę z `nameAndCount`, bo jest teraz w `item.icon`
+        const itemIconHTML = isSpecial ? item.icon : (item.icon ? `<i class="${item.icon}"></i>` : '');
+        const nameAndCount = `<span>${itemIconHTML}${item.name}</span>${countSpan}`;
 
         if (item.children?.length > 0) {
             content.classList.add('is-expandable');
-            // ZMIANA: Dodano obsługę ikony obok strzałki
             const expanderIcon = `<i class="fas fa-angle-right"></i>`;
             content.innerHTML = `${expanderIcon} ${nameAndCount}`;
             const childrenContainer = document.createElement('div');
@@ -148,92 +145,156 @@ document.addEventListener('DOMContentLoaded', function () {
         return node;
     }
 
+    // --- PRZEBUDOWANA FUNKCJA GENERUJĄCA MAPĘ MYŚLI ---
     function generateMindmap() {
         dom.mindmapRoot.innerHTML = ''; // Wyczyść stary widok
         const categoryCounts = allTools.reduce((acc, tool) => {
             acc[tool.category_slug] = (acc[tool.category_slug] || 0) + 1;
             return acc;
         }, {});
-
-        // --- NOWA STRUKTURA MAPY MYŚLI ---
-        const mindmapStructure = [
-            { name: 'Wyszukiwanie Osób', icon: 'fas fa-user-friends', keywords: ['username-search-engines', 'specific-sites', 'email-search', 'common-email-formats', 'email-verification', 'breach-data', 'general-people-search', 'registries', 'dating', 'voicemail', 'telephone-numbers', 'birth-records', 'death-records', 'osoby', 'linki-do-profili'] },
-            { name: 'Analiza Techniczna', icon: 'fas fa-sitemap', keywords: ['mail-blacklists', 'whois-records', 'subdomains', 'discovery', 'certificate-search', 'passivedns', 'host--port-discovery', 'ipv4', 'ipv6', 'bgp', 'dnssec', 'cloud-resources', 'network-analysis-tools'] },
-            { name: 'Obrazy i Media', icon: 'fas fa-photo-video', keywords: ['search', 'instagram', 'flickr', 'metadata', 'forensics', 'pictures', 'location--mapping', 'videos', 'webcams', 'wyszukiwanie', 'analiza', 'wideo'] },
-            { name: 'Biznes i Instytucje', icon: 'fas fa-building', keywords: ['property-records', 'court--criminal-records', 'government-records', 'financial--tax-resources', 'us-county-data', 'us-voter-records', 'patent-records', 'us-political-records', 'public-records', 'annual-reports', 'general-info--news', 'company-profiles', 'employee-profiles--resumes', 'additional-resources', 'rejestry-publiczne'] },
-            { name: 'Transport i Komunikacja', icon: 'fas fa-car-side', keywords: ['vehicle-records', 'air-traffic-records', 'marine-records', 'railway-records', 'transportation', 'geolocation-tools', 'coordinates', 'map-locations', 'map-reporting-tools', 'mobile-coverage', 'geolocation-tools--maps', 'rozkłady-jazdy', 'miejscowości', 'lokalizacja-pojazdow', 'tablice-rejestracyjne', 'skradzione-pojazdy', 'spotting', 'ladowy', 'lotniczy', 'morski'] },
-            { name: '🛡️ Cyberbezpieczeństwo', icon: 'fas fa-shield-alt', keywords: ['reputation', 'domain-blacklists', 'typosquatting', 'scanners', 'disclosure-sites', 'vulnerabilities', 'report-malicious-sites', 'malicious-file-analysis', 'default-passwords', 'exploits--advisories', 'phishing', 'ioc-tools', 'ttps', 'threat-intelligence', 'search', 'office-files', 'pdfs', 'android', 'hosted-automated-analysis', 'pcaps'] },
-            { name: '🕶️ Prywatność i OPSEC', icon: 'fas fa-user-secret', keywords: ['ip-loggers', 'persona-creation', 'anonymous-vpns', 'spoof-user-agent', 'vpn-tests', 'proxy-tests', 'anonymous-browsing', 'privacy--clean-up', 'metadata--style', 'tor', 'tor-search', 'tor-directories', 'dark-web', 'tymczasowe-skrzynki-e-mail'] },
-            { name: '⚙️ Narzędzia i Automatyzacja', icon: 'fas fa-cogs', keywords: ['tools', 'url-expanders', 'barcodes--qr', 'javascript', 'php', 'unix', 'windows', 'python', 'encoding--decoding', 'osint-automation', 'pentesting-recon', 'virtual-machines', 'wordlist', 'ai-tools', 'emulation-tools', 'screen-capture', 'narzedzia', 'platformy-sledcze', 'generatory-danych--tozsamosci'] },
-            { name: '📚 Bazy Wiedzy i Wyszukiwarki', icon: 'fas fa-book', keywords: ['social-analysis', 'general-search', 'meta-search', 'code-search', 'ftp-search', 'academic--publication-search', 'news-search', 'other-search', 'search-tools', 'search-engine-guides', 'fact-checking', 'forum-search-engines', 'blog-search-engines', 'irc-search', 'other-media', 'text', 'fonts', 'data-leaks', 'public-datasets', 'games', 'training', 'blogi', 'kursy--prezentacje', 'literatura', 'newslettery'] },
-            { name: '🌐 Analiza Sieci i Archiwa', icon: 'fas fa-globe-americas', keywords: ['analytics', 'change-detection', 'web', 'web-browsing', 'przechowywanie', 'wklejki'] },
-            { name: '🇵🇱 Polskie Źródła', icon: 'fas fa-flag', keywords: ['adresy-e-mail', 'geolokalizacja', 'listy--rejestry', 'skracacze', 'whois', 'domeny', 'historyczne', 'lotnicze', 'miejskie-systemy-informacji-przestrzennej', 'meteorologiczne', 'wojewodzkie-systemy-informacji-przestrzennej', 'telekomunikacja', 'mapy--uslugi-lokalizacyjne', 'genealogia', 'nazwiska', 'medycyna', 'nauka', 'partie', 'polityka', 'prawo', 'diecezje', 'kosciol-katolicki', 'duchowienstwo', 'pozostale', 'zmarli', 'fediwersum', 'serwisy-spolecznosciowe', 'seks', 'serwisy-randkowe', 'opinie', 'branzowe', 'gieldy-dlugow', 'przetargi', 'rejestry', 'badania-spoleczne--statystyki', 'kosy--zgody--uklady', 'ustawki', 'kibice', 'subkultury', 'spoleczenstwo', 'bezpieczenstwo-publiczne', 'allegro', 'gielda', 'przemysl', 'biznes--gospodarka', 'archiwa', 'jezyki--gwara', 'slang', 'symbolika', 'rejestry-zwierzat', 'rejestry-publiczne'] },
-            { name: 'Kryptowaluty', icon: 'fab fa-bitcoin', keywords: ['bitcoin', 'ethereum', 'monero'] },
-            { name: 'Inne', icon: 'fas fa-asterisk', keywords: ['profile', 'social-networking', 'skype', 'snapchat', 'kik', 'yikyak', 'steam-discord--gaming-networks', 'classifieds', 'streaming-video', 'bluesky', 'tiktok', 'linkedin', 'reddit'] } // Ostatnia kategoria jako "catch-all"
+        
+        // --- NOWA STRUKTURA Z SUPER-GRUPAMI ---
+        const superGroupsConfig = [
+            {
+                name: 'DZIEDZINY OSINT',
+                icon: 'fas fa-search-location',
+                categories: [
+                    { name: 'Wyszukiwanie Osób', icon: 'fas fa-user-friends', keywords: ['username-search-engines', 'specific-sites', 'email-search', 'common-email-formats', 'email-verification', 'breach-data', 'general-people-search', 'registries', 'dating', 'voicemail', 'telephone-numbers', 'birth-records', 'death-records', 'osoby', 'linki-do-profili', 'nazwiska', 'genealogia', 'zmarli'] },
+                    { name: 'Obrazy i Media', icon: 'fas fa-photo-video', keywords: ['image-search', 'instagram', 'flickr', 'metadata', 'forensics', 'pictures', 'location--mapping', 'videos', 'webcams', 'wyszukiwanie', 'analiza', 'wideo', 'search'] },
+                    { name: 'Biznes i Instytucje', icon: 'fas fa-building', keywords: ['property-records', 'court--criminal-records', 'government-records', 'financial--tax-resources', 'us-county-data', 'us-voter-records', 'patent-records', 'us-political-records', 'public-records', 'annual-reports', 'general-info--news', 'company-profiles', 'employee-profiles--resumes', 'additional-resources', 'rejestry-publiczne', 'biznes--gospodarka', 'gielda', 'gieldy-dlugow', 'przetargi', 'rejestry', 'opinie', 'branzowe'] },
+                    { name: 'Transport i Komunikacja', icon: 'fas fa-car-side', keywords: ['vehicle-records', 'air-traffic-records', 'marine-records', 'railway-records', 'transportation', 'geolocation-tools', 'coordinates', 'map-locations', 'map-reporting-tools', 'mobile-coverage', 'geolocation-tools--maps', 'rozkłady-jazdy', 'miejscowości', 'lokalizacja-pojazdow', 'tablice-rejestracyjne', 'skradzione-pojazdy', 'spotting', 'ladowy', 'lotniczy', 'morski', 'telekomunikacja'] },
+                    { name: '🇵🇱 Polskie Źródła', icon: 'fas fa-flag', keywords: ['adresy-e-mail', 'geolokalizacja', 'listy--rejestry', 'skracacze', 'whois', 'domeny', 'historyczne', 'lotnicze', 'miejskie-systemy-informacji-przestrzennej', 'meteorologiczne', 'wojewodzkie-systemy-informacji-przestrzennej', 'mapy--uslugi-lokalizacyjne', 'medycyna', 'nauka', 'partie', 'polityka', 'prawo', 'diecezje', 'kosciol-katolicki', 'duchowienstwo', 'pozostale', 'fediwersum', 'serwisy-spolecznosciowe', 'seks', 'serwisy-randkowe', 'kosy--zgody--uklady', 'ustawki', 'kibice', 'subkultury', 'spoleczenstwo', 'bezpieczenstwo-publiczne', 'allegro', 'przemysl', 'archiwa', 'jezyki--gwara', 'slang', 'symbolika', 'rejestry-zwierzat'] }
+                ]
+            },
+            {
+                name: 'ANALIZA TECHNICZNA I CYBERSEC',
+                icon: 'fas fa-shield-virus',
+                categories: [
+                    { name: 'Analiza Techniczna', icon: 'fas fa-sitemap', keywords: ['mail-blacklists', 'whois-records', 'subdomains', 'discovery', 'certificate-search', 'passivedns', 'host--port-discovery', 'ipv4', 'ipv6', 'bgp', 'dnssec', 'cloud-resources', 'network-analysis-tools', 'ip-loggers'] },
+                    { name: 'Cyberbezpieczeństwo', icon: 'fas fa-shield-alt', keywords: ['reputation', 'domain-blacklists', 'typosquatting', 'scanners', 'disclosure-sites', 'vulnerabilities', 'report-malicious-sites', 'malicious-file-analysis', 'default-passwords', 'exploits--advisories', 'phishing', 'ioc-tools', 'ttps', 'threat-intelligence', 'search', 'office-files', 'pdfs', 'android', 'hosted-automated-analysis', 'pcaps'] },
+                    { name: 'Analiza Sieci i Archiwa', icon: 'fas fa-globe-americas', keywords: ['analytics', 'change-detection', 'web', 'web-browsing', 'przechowywanie', 'wklejki'] },
+                    { name: 'Kryptowaluty', icon: 'fab fa-bitcoin', keywords: ['bitcoin', 'ethereum', 'monero'] },
+                ]
+            },
+            {
+                name: 'WARSZTAT ANALITYKA',
+                icon: 'fas fa-tools',
+                categories: [
+                    { name: 'Narzędzia i Automatyzacja', icon: 'fas fa-cogs', keywords: ['tools', 'url-expanders', 'barcodes--qr', 'javascript', 'php', 'unix', 'windows', 'python', 'encoding--decoding', 'osint-automation', 'pentesting-recon', 'virtual-machines', 'wordlist', 'ai-tools', 'emulation-tools', 'screen-capture', 'narzedzia', 'platformy-sledcze', 'generatory-danych--tozsamosci'] },
+                    { name: 'Bazy Wiedzy i Wyszukiwarki', icon: 'fas fa-book', keywords: ['social-analysis', 'general-search', 'meta-search', 'code-search', 'ftp-search', 'academic--publication-search', 'news-search', 'other-search', 'search-tools', 'search-engine-guides', 'fact-checking', 'forum-search-engines', 'blog-search-engines', 'irc-search', 'other-media', 'text', 'fonts', 'data-leaks', 'public-datasets', 'games', 'training', 'blogi', 'kursy--prezentacje', 'literatura', 'newslettery'] },
+                    { name: 'Prywatność i OPSEC', icon: 'fas fa-user-secret', keywords: ['persona-creation', 'anonymous-vpns', 'spoof-user-agent', 'vpn-tests', 'proxy-tests', 'anonymous-browsing', 'privacy--clean-up', 'metadata--style', 'tor', 'tor-search', 'tor-directories', 'dark-web', 'tymczasowe-skrzynki-e-mail'] },
+                ]
+            }
         ];
         
         const specialCategories = [
-            { name: 'Wszystkie narzędzia', slug: 'all', icon: 'fas fa-grip-horizontal', count: allTools.length },
-            { name: 'Ulubione', slug: 'favorites', icon: 'fas fa-star', count: getFavorites().length },
-            { name: 'Popularne', slug: 'popular', icon: 'fas fa-fire', count: 10 },
-            { name: 'Baza Wiedzy', slug: 'knowledge', icon: 'fas fa-book-open' },
-            { name: 'Statystyki', slug: 'stats', icon: 'fas fa-chart-pie' },
+            { name: 'Wszystkie narzędzia', slug: 'all', icon: '<i class="fas fa-grip-horizontal"></i>', count: allTools.length },
+            { name: 'Ulubione', slug: 'favorites', icon: '<i class="fas fa-star" style="color:var(--yellow-star);"></i>', count: getFavorites().length },
+            { name: 'Popularne', slug: 'popular', icon: '<i class="fas fa-fire" style="color:#f59e0b;"></i>', count: 10 },
+            { name: 'Baza Wiedzy', slug: 'knowledge', icon: '<i class="fas fa-book-open"></i>' },
+            { name: 'Statystyki', slug: 'stats', icon: '<i class="fas fa-chart-pie"></i>' },
         ];
         
-        specialCategories.forEach(cat => {
-            const node = buildMindmapNode(cat, true, cat.count);
-            if(cat.slug === 'favorites') node.querySelector('.fa-star').style.color = 'var(--yellow-star)';
-            if(cat.slug === 'popular') node.querySelector('.fa-fire').style.color = '#f59e0b';
-            dom.mindmapRoot.appendChild(node);
-        });
-
-        // --- NOWA LOGIKA KATEGORYZACJI ---
-        const uniqueCategories = new Map();
-        allTools.forEach(tool => {
-            if (!uniqueCategories.has(tool.category_slug)) {
-                uniqueCategories.set(tool.category_slug, { name: tool.category, slug: tool.category_slug, count: categoryCounts[tool.category_slug] });
-            }
-        });
+        specialCategories.forEach(cat => dom.mindmapRoot.appendChild(buildMindmapNode(cat, true, cat.count)));
         
-        let superCatColorIndex = 0;
-        const superCatMap = new Map(mindmapStructure.map(sc => [sc.name, { ...sc, children: [], color: colorPalette[superCatColorIndex++ % colorPalette.length] }]));
+        const separator = document.createElement('hr');
+        separator.className = 'sidebar-separator';
+        dom.mindmapRoot.appendChild(separator);
 
-        uniqueCategories.forEach(cat => {
-            let assigned = false;
-            for (const superCat of superCatMap.values()) {
-                if (superCat.keywords.includes(cat.slug)) {
-                    superCat.children.push(cat);
-                    assigned = true;
-                    break;
+        const uniqueSubCategories = new Map();
+        allTools.forEach(tool => {
+            if (!uniqueSubCategories.has(tool.category_slug)) {
+                uniqueSubCategories.set(tool.category_slug, { name: tool.category, slug: tool.category_slug, count: categoryCounts[tool.category_slug] });
+            }
+        });
+
+        const assignedSlugs = new Set();
+        const expandedSuperGroups = getExpandedSuperGroups();
+
+        superGroupsConfig.forEach(superGroup => {
+            const superGroupNode = document.createElement('div');
+            superGroupNode.className = 'super-group-node';
+            if (expandedSuperGroups.includes(superGroup.name)) {
+                superGroupNode.classList.add('is-expanded');
+            }
+
+            const header = document.createElement('div');
+            header.className = 'super-group-header';
+            header.innerHTML = `<i class="fas fa-chevron-right super-group-toggle"></i><i class="${superGroup.icon} super-group-icon"></i> ${superGroup.name}`;
+            
+            const childrenContainer = document.createElement('div');
+            childrenContainer.className = 'super-group-children';
+            const childrenInner = document.createElement('div');
+            childrenContainer.appendChild(childrenInner);
+
+            superGroup.categories.forEach(category => {
+                const subCategoriesForThis = [];
+                category.keywords.forEach(keyword => {
+                    if (uniqueSubCategories.has(keyword)) {
+                        subCategoriesForThis.push(uniqueSubCategories.get(keyword));
+                        assignedSlugs.add(keyword);
+                    }
+                });
+
+                if (subCategoriesForThis.length > 0) {
+                    const totalCount = subCategoriesForThis.reduce((sum, child) => sum + (child.count || 0), 0);
+                    subCategoriesForThis.sort((a, b) => a.name.localeCompare(b.name));
+                    category.children = subCategoriesForThis;
+                    childrenInner.appendChild(buildMindmapNode(category, false, totalCount, category.color));
                 }
-            }
-            if (!assigned) {
-                // Jeśli kategoria nie pasuje nigdzie indziej, wrzuć ją do "Inne"
-                superCatMap.get('Inne').children.push(cat);
+            });
+
+            if (childrenInner.hasChildNodes()) {
+                header.addEventListener('click', () => {
+                    superGroupNode.classList.toggle('is-expanded');
+                    const currentExpanded = getExpandedSuperGroups();
+                    if (superGroupNode.classList.contains('is-expanded')) {
+                        if (!currentExpanded.includes(superGroup.name)) currentExpanded.push(superGroup.name);
+                    } else {
+                        const index = currentExpanded.indexOf(superGroup.name);
+                        if (index > -1) currentExpanded.splice(index, 1);
+                    }
+                    ls.set('expandedSuperGroups', currentExpanded);
+                });
+                superGroupNode.appendChild(header);
+                superGroupNode.appendChild(childrenContainer);
+                dom.mindmapRoot.appendChild(superGroupNode);
             }
         });
 
-        superCatMap.forEach(superCat => {
-            if (superCat.children.length > 0) {
-                const totalCount = superCat.children.reduce((sum, child) => sum + (child.count || 0), 0);
-                superCat.children.sort((a, b) => a.name.localeCompare(b.name));
-                dom.mindmapRoot.appendChild(buildMindmapNode(superCat, false, totalCount, superCat.color));
+        // Obsługa kategorii "Inne" dla nieprzypisanych
+        const unassignedCategories = [];
+        uniqueSubCategories.forEach((cat, slug) => {
+            if (!assignedSlugs.has(slug)) {
+                unassignedCategories.push(cat);
             }
         });
+
+        if (unassignedCategories.length > 0) {
+            const otherCategory = { name: 'Inne', icon: 'fas fa-asterisk', children: unassignedCategories.sort((a, b) => a.name.localeCompare(b.name)) };
+            const totalCount = otherCategory.children.reduce((sum, child) => sum + (child.count || 0), 0);
+            dom.mindmapRoot.appendChild(buildMindmapNode(otherCategory, false, totalCount));
+        }
     }
 
-    // --- Główna Logika (Filtrowanie, Wyświetlanie) ---
+    // --- Pozostała część kodu (logika filtrowania, interakcje) bez zmian ---
     function handleCategorySelection(event) {
         const target = event.currentTarget;
         document.querySelectorAll('.node-content.is-active').forEach(n => n.classList.remove('is-active'));
         target.classList.add('is-active');
         if (window.innerWidth <= 1024) dom.sidebar.classList.remove('is-open');
+
+        const parentSuperGroup = target.closest('.super-group-node');
+        if(parentSuperGroup && !parentSuperGroup.classList.contains('is-expanded')) {
+            parentSuperGroup.classList.add('is-expanded');
+        }
+
         renderContent();
     }
-
+    
     function renderContent() {
         const activeNode = document.querySelector('.node-content.is-active');
-        if (!activeNode) return; // Zabezpieczenie na wypadek braku aktywnego node'a
+        if (!activeNode) return;
         const slug = activeNode.dataset.categorySlug;
         const name = activeNode.dataset.categoryName;
         const searchTerm = dom.searchInput.value.toLowerCase().trim();
@@ -254,7 +315,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 const counts = getClickCounts();
                 toolsToDisplay = [...allTools].sort((a, b) => (counts[b.name] || 0) - (counts[a.name] || 0)).slice(0, 10);
             } else {
-                toolsToDisplay = allTools.filter(t => t.category_slug === slug);
+                // NOWOŚĆ: Obsługa kliknięcia na nadkategorię
+                const clickedNode = document.querySelector(`[data-category-name="${name}"]`);
+                const parentNode = clickedNode ? clickedNode.closest('.mindmap-node') : null;
+                if (parentNode && parentNode.querySelector('.node-children')) { // To jest nadkategoria
+                    const childSlugs = [...parentNode.querySelectorAll('[data-category-slug]')].map(n => n.dataset.categorySlug);
+                    toolsToDisplay = allTools.filter(t => childSlugs.includes(t.category_slug));
+                } else { // To jest podkategoria
+                    toolsToDisplay = allTools.filter(t => t.category_slug === slug);
+                }
             }
 
             const filteredTools = toolsToDisplay.filter(tool =>
@@ -292,7 +361,6 @@ document.addEventListener('DOMContentLoaded', function () {
         dom.toolCount.textContent = `Łącznie ${allTools.length} narzędzi`;
     }
 
-    // --- Interakcje Użytkownika ---
     dom.toolsContainer.addEventListener('click', e => {
         const favBtn = e.target.closest('.favorite-btn');
         if (favBtn) {
@@ -357,7 +425,6 @@ document.addEventListener('DOMContentLoaded', function () {
         dom.modalContainer.classList.add('is-open');
     }
 
-    // --- Inicjalizacja Aplikacji ---
     async function initializeApp() {
         try {
             const response = await fetch('database.json');
