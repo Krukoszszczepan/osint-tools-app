@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Stan aplikacji i dane ---
     let allTools = [];
-    const colorPalette = ['#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316'];
+    const colorPalette = ['#3b82f6', '#ef4444', '#22c55e', '#eab308', '#8b5cf6', ' #ec4899', '#14b8a6', '#f97316'];
     const categoryColors = {};
     let colorIndex = 0;
 
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const getRatings = () => ls.get('ratings', {});
     const getClickCounts = () => ls.get('clickCounts', {});
     const getViewMode = () => ls.get('viewMode', 'grid');
-    // NOWOŚĆ: Funkcja pomocnicza do podświetlania tekstu
     const highlightText = (text, searchTerm) => {
         if (!searchTerm) return text;
         const regex = new RegExp(`(${searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
@@ -77,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Generowanie HTML ---
-    // ZMIANA: Dodano argument `searchTerm` do podświetlania wyników
     function generateToolCard(tool, searchTerm = '') {
         const favorites = getFavorites();
         const ratings = getRatings();
@@ -85,8 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const isFavorite = favorites.includes(tool.name);
         const rating = ratings[tool.name] || 0;
         const isNew = (new Date() - new Date(tool.date_added)) / (1000 * 60 * 60 * 24) < 14;
-
-        // NOWOŚĆ: Podświetlanie nazwy i opisu
         const highlightedName = highlightText(tool.name, searchTerm);
         const highlightedDesc = highlightText(tool.description, searchTerm);
 
@@ -107,7 +103,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="rating-stars" data-rating="${rating}">
                         ${[...Array(5)].map((_, i) => `<i class="fas fa-star ${i < rating ? 'is-rated' : ''}"></i>`).join('')}
                     </div>
-                    <!-- NOWOŚĆ: Grupa przycisków i przycisk Kopiuj URL -->
                     <div class="tool-actions-group">
                         <button class="copy-btn" title="Kopiuj URL"><i class="fas fa-copy"></i></button>
                         <a href="${tool.url}" target="_blank" class="tool-link"><i class="fas fa-external-link-alt"></i> Otwórz</a>
@@ -115,12 +110,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             </div>`;
     }
-
-    // ZMIANA: Dodano argumenty `count` i `accentColor`
+    
+    // ZMIANA: Dodano obsługę ikony dla nadkategorii
     function buildMindmapNode(item, isSpecial = false, count = 0, accentColor = null) {
         const node = document.createElement('div');
         node.className = 'mindmap-node';
-        // NOWOŚĆ: Ustawienie koloru akcentu dla linii
         if (accentColor) {
             node.style.setProperty('--node-accent-color', accentColor);
         }
@@ -129,17 +123,18 @@ document.addEventListener('DOMContentLoaded', function () {
         content.className = 'node-content';
         node.appendChild(content);
 
-        // NOWOŚĆ: Dodanie licznika do wyświetlania
         const countSpan = count > 0 ? `<span class="node-count">(${count})</span>` : '';
-        const nameAndCount = `<span>${isSpecial ? item.icon + ' ' : ''}${item.name}</span>${countSpan}`;
+        const itemIcon = item.icon ? `<i class="${item.icon}"></i>` : '';
+        const nameAndCount = `<span>${itemIcon}${item.name}</span>${countSpan}`;
 
         if (item.children?.length > 0) {
             content.classList.add('is-expandable');
-            content.innerHTML = `<i class="fas fa-angle-right"></i> ${nameAndCount}`;
+            // ZMIANA: Dodano obsługę ikony obok strzałki
+            const expanderIcon = `<i class="fas fa-angle-right"></i>`;
+            content.innerHTML = `${expanderIcon} ${nameAndCount}`;
             const childrenContainer = document.createElement('div');
             childrenContainer.className = 'node-children';
             const innerDiv = document.createElement('div');
-            // Przekazanie koloru do dzieci
             item.children.forEach(child => innerDiv.appendChild(buildMindmapNode(child, false, child.count, accentColor)));
             childrenContainer.appendChild(innerDiv);
             node.appendChild(childrenContainer);
@@ -154,46 +149,68 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateMindmap() {
-        // Obliczenia liczników
+        dom.mindmapRoot.innerHTML = ''; // Wyczyść stary widok
         const categoryCounts = allTools.reduce((acc, tool) => {
             acc[tool.category_slug] = (acc[tool.category_slug] || 0) + 1;
             return acc;
         }, {});
 
-        const superCategoriesConfig = { 'Wyszukiwanie Osób': ['username', 'email', 'people', 'osoby', 'person', 'phone'], 'Analiza Techniczna': ['domain', 'ip', 'dns', 'siec', 'malware', 'exploit', 'vulnerabilities'], 'Obrazy i Media': ['image', 'video', 'obrazy', 'wideo', 'maps', 'mapy', 'geolokalizacja', 'metadata'], 'Biznes i Instytucje': ['business', 'firmy', 'rejestry', 'finanse', 'dane-publiczne', 'government'], 'Transport i Komunikacja': ['transport', 'lotnictwo', 'morski', 'pociagi', 'samochody', 'flight'], 'Inne Narzędzia': [] };
-        const specialCategories = [
-            { name: 'Wszystkie narzędzia', slug: 'all', icon: '<i class="fas fa-grip-horizontal"></i>', count: allTools.length },
-            { name: 'Ulubione', slug: 'favorites', icon: '<i class="fas fa-star" style="color:var(--yellow-star);"></i>', count: getFavorites().length },
-            { name: 'Popularne', slug: 'popular', icon: '<i class="fas fa-fire" style="color:#f59e0b;"></i>', count: 10 },
-            { name: 'Baza Wiedzy', slug: 'knowledge', icon: '<i class="fas fa-book-open"></i>' },
-            { name: 'Statystyki', slug: 'stats', icon: '<i class="fas fa-chart-pie"></i>' },
+        // --- NOWA STRUKTURA MAPY MYŚLI ---
+        const mindmapStructure = [
+            { name: 'Wyszukiwanie Osób', icon: 'fas fa-user-friends', keywords: ['username-search-engines', 'specific-sites', 'email-search', 'common-email-formats', 'email-verification', 'breach-data', 'general-people-search', 'registries', 'dating', 'voicemail', 'telephone-numbers', 'birth-records', 'death-records', 'osoby', 'linki-do-profili'] },
+            { name: 'Analiza Techniczna', icon: 'fas fa-sitemap', keywords: ['mail-blacklists', 'whois-records', 'subdomains', 'discovery', 'certificate-search', 'passivedns', 'host--port-discovery', 'ipv4', 'ipv6', 'bgp', 'dnssec', 'cloud-resources', 'network-analysis-tools'] },
+            { name: 'Obrazy i Media', icon: 'fas fa-photo-video', keywords: ['search', 'instagram', 'flickr', 'metadata', 'forensics', 'pictures', 'location--mapping', 'videos', 'webcams', 'wyszukiwanie', 'analiza', 'wideo'] },
+            { name: 'Biznes i Instytucje', icon: 'fas fa-building', keywords: ['property-records', 'court--criminal-records', 'government-records', 'financial--tax-resources', 'us-county-data', 'us-voter-records', 'patent-records', 'us-political-records', 'public-records', 'annual-reports', 'general-info--news', 'company-profiles', 'employee-profiles--resumes', 'additional-resources', 'rejestry-publiczne'] },
+            { name: 'Transport i Komunikacja', icon: 'fas fa-car-side', keywords: ['vehicle-records', 'air-traffic-records', 'marine-records', 'railway-records', 'transportation', 'geolocation-tools', 'coordinates', 'map-locations', 'map-reporting-tools', 'mobile-coverage', 'geolocation-tools--maps', 'rozkłady-jazdy', 'miejscowości', 'lokalizacja-pojazdow', 'tablice-rejestracyjne', 'skradzione-pojazdy', 'spotting', 'ladowy', 'lotniczy', 'morski'] },
+            { name: '🛡️ Cyberbezpieczeństwo', icon: 'fas fa-shield-alt', keywords: ['reputation', 'domain-blacklists', 'typosquatting', 'scanners', 'disclosure-sites', 'vulnerabilities', 'report-malicious-sites', 'malicious-file-analysis', 'default-passwords', 'exploits--advisories', 'phishing', 'ioc-tools', 'ttps', 'threat-intelligence', 'search', 'office-files', 'pdfs', 'android', 'hosted-automated-analysis', 'pcaps'] },
+            { name: '🕶️ Prywatność i OPSEC', icon: 'fas fa-user-secret', keywords: ['ip-loggers', 'persona-creation', 'anonymous-vpns', 'spoof-user-agent', 'vpn-tests', 'proxy-tests', 'anonymous-browsing', 'privacy--clean-up', 'metadata--style', 'tor', 'tor-search', 'tor-directories', 'dark-web', 'tymczasowe-skrzynki-e-mail'] },
+            { name: '⚙️ Narzędzia i Automatyzacja', icon: 'fas fa-cogs', keywords: ['tools', 'url-expanders', 'barcodes--qr', 'javascript', 'php', 'unix', 'windows', 'python', 'encoding--decoding', 'osint-automation', 'pentesting-recon', 'virtual-machines', 'wordlist', 'ai-tools', 'emulation-tools', 'screen-capture', 'narzedzia', 'platformy-sledcze', 'generatory-danych--tozsamosci'] },
+            { name: '📚 Bazy Wiedzy i Wyszukiwarki', icon: 'fas fa-book', keywords: ['social-analysis', 'general-search', 'meta-search', 'code-search', 'ftp-search', 'academic--publication-search', 'news-search', 'other-search', 'search-tools', 'search-engine-guides', 'fact-checking', 'forum-search-engines', 'blog-search-engines', 'irc-search', 'other-media', 'text', 'fonts', 'data-leaks', 'public-datasets', 'games', 'training', 'blogi', 'kursy--prezentacje', 'literatura', 'newslettery'] },
+            { name: '🌐 Analiza Sieci i Archiwa', icon: 'fas fa-globe-americas', keywords: ['analytics', 'change-detection', 'web', 'web-browsing', 'przechowywanie', 'wklejki'] },
+            { name: '🇵🇱 Polskie Źródła', icon: 'fas fa-flag', keywords: ['adresy-e-mail', 'geolokalizacja', 'listy--rejestry', 'skracacze', 'whois', 'domeny', 'historyczne', 'lotnicze', 'miejskie-systemy-informacji-przestrzennej', 'meteorologiczne', 'wojewodzkie-systemy-informacji-przestrzennej', 'telekomunikacja', 'mapy--uslugi-lokalizacyjne', 'genealogia', 'nazwiska', 'medycyna', 'nauka', 'partie', 'polityka', 'prawo', 'diecezje', 'kosciol-katolicki', 'duchowienstwo', 'pozostale', 'zmarli', 'fediwersum', 'serwisy-spolecznosciowe', 'seks', 'serwisy-randkowe', 'opinie', 'branzowe', 'gieldy-dlugow', 'przetargi', 'rejestry', 'badania-spoleczne--statystyki', 'kosy--zgody--uklady', 'ustawki', 'kibice', 'subkultury', 'spoleczenstwo', 'bezpieczenstwo-publiczne', 'allegro', 'gielda', 'przemysl', 'biznes--gospodarka', 'archiwa', 'jezyki--gwara', 'slang', 'symbolika', 'rejestry-zwierzat', 'rejestry-publiczne'] },
+            { name: 'Kryptowaluty', icon: 'fab fa-bitcoin', keywords: ['bitcoin', 'ethereum', 'monero'] },
+            { name: 'Inne', icon: 'fas fa-asterisk', keywords: ['profile', 'social-networking', 'skype', 'snapchat', 'kik', 'yikyak', 'steam-discord--gaming-networks', 'classifieds', 'streaming-video', 'bluesky', 'tiktok', 'linkedin', 'reddit'] } // Ostatnia kategoria jako "catch-all"
         ];
         
-        specialCategories.forEach(cat => dom.mindmapRoot.appendChild(buildMindmapNode(cat, true, cat.count)));
+        const specialCategories = [
+            { name: 'Wszystkie narzędzia', slug: 'all', icon: 'fas fa-grip-horizontal', count: allTools.length },
+            { name: 'Ulubione', slug: 'favorites', icon: 'fas fa-star', count: getFavorites().length },
+            { name: 'Popularne', slug: 'popular', icon: 'fas fa-fire', count: 10 },
+            { name: 'Baza Wiedzy', slug: 'knowledge', icon: 'fas fa-book-open' },
+            { name: 'Statystyki', slug: 'stats', icon: 'fas fa-chart-pie' },
+        ];
         
-        let superCatColorIndex = 0;
-        const superCatMap = new Map();
-        Object.keys(superCategoriesConfig).forEach(scName => {
-            superCatMap.set(scName, { name: scName, children: [], color: colorPalette[superCatColorIndex++ % colorPalette.length] });
+        specialCategories.forEach(cat => {
+            const node = buildMindmapNode(cat, true, cat.count);
+            if(cat.slug === 'favorites') node.querySelector('.fa-star').style.color = 'var(--yellow-star)';
+            if(cat.slug === 'popular') node.querySelector('.fa-fire').style.color = '#f59e0b';
+            dom.mindmapRoot.appendChild(node);
         });
-        
+
+        // --- NOWA LOGIKA KATEGORYZACJI ---
         const uniqueCategories = new Map();
         allTools.forEach(tool => {
             if (!uniqueCategories.has(tool.category_slug)) {
                 uniqueCategories.set(tool.category_slug, { name: tool.category, slug: tool.category_slug, count: categoryCounts[tool.category_slug] });
             }
         });
+        
+        let superCatColorIndex = 0;
+        const superCatMap = new Map(mindmapStructure.map(sc => [sc.name, { ...sc, children: [], color: colorPalette[superCatColorIndex++ % colorPalette.length] }]));
 
         uniqueCategories.forEach(cat => {
             let assigned = false;
-            for (const [scName, keywords] of Object.entries(superCategoriesConfig)) {
-                if (keywords.some(kw => cat.slug.includes(kw))) {
-                    superCatMap.get(scName).children.push(cat);
+            for (const superCat of superCatMap.values()) {
+                if (superCat.keywords.includes(cat.slug)) {
+                    superCat.children.push(cat);
                     assigned = true;
                     break;
                 }
             }
-            if (!assigned) superCatMap.get('Inne Narzędzia').children.push(cat);
+            if (!assigned) {
+                // Jeśli kategoria nie pasuje nigdzie indziej, wrzuć ją do "Inne"
+                superCatMap.get('Inne').children.push(cat);
+            }
         });
 
         superCatMap.forEach(superCat => {
@@ -216,6 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderContent() {
         const activeNode = document.querySelector('.node-content.is-active');
+        if (!activeNode) return; // Zabezpieczenie na wypadek braku aktywnego node'a
         const slug = activeNode.dataset.categorySlug;
         const name = activeNode.dataset.categoryName;
         const searchTerm = dom.searchInput.value.toLowerCase().trim();
@@ -287,7 +305,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 favorites.push(toolName);
                 favBtn.classList.add('is-favorite');
-                // NOWOŚĆ: Animacja pulsowania
                 favBtn.classList.add('pulsing');
                 favBtn.addEventListener('animationend', () => favBtn.classList.remove('pulsing'), { once: true });
             }
@@ -313,7 +330,6 @@ document.addEventListener('DOMContentLoaded', function () {
             ls.set('clickCounts', counts);
         }
         
-        // NOWOŚĆ: Obsługa przycisku Kopiuj URL
         const copyBtn = e.target.closest('.copy-btn');
         if (copyBtn) {
             const toolUrl = copyBtn.closest('.tool-card').dataset.toolUrl;
