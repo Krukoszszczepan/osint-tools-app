@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+    <!-- Podstawowe Meta Tagi -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OSINT Tools - Kompletna Baza Narzędzi</title>
+    <title>OSINT Toolbox - Interaktywna Baza Narzędzi</title>
     
+    <!-- SEO i Opis Strony -->
+    <meta name="description" content="Przeglądaj, wyszukuj i filtruj ponad 1600 narzędzi OSINT. Interaktywna mapa myśli, oceny, ulubione i zaawansowane wyszukiwanie w jednym miejscu. Twoje centrum białego wywiadu.">
+    <meta name="keywords" content="OSINT, biały wywiad, narzędzia OSINT, open source intelligence, cyberbezpieczeństwo, analiza danych, dochodzenia, toolbox">
+    <meta name="author" content="Twoje Imię lub Nazwa Projektu">
+
+    <!-- Favicon (ikona w karcie przeglądarki) - dynamicznie generowana z ikony Font Awesome -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><path fill=%22%233b82f6%22 d=%22M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z%22/></svg>">
+    
+    <!-- Open Graph / Facebook Meta Tagi (dla udostępniania w mediach społecznościowych) -->
+    <meta property="og:title" content="OSINT Toolbox - Interaktywna Baza Narzędzi">
+    <meta property="og:description" content="Kompletna, interaktywna baza ponad 1600 narzędzi do białego wywiadu.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://twoja-domena.com/">
+    <meta property="og:image" content="https://twoja-domena.com/og-image.png"> <!-- Zmień na link do obrazka podglądu -->
+
+    <!-- Twitter Card Meta Tagi -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OSINT Toolbox - Interaktywna Baza Narzędzi">
+    <meta name="twitter:description" content="Kompletna, interaktywna baza ponad 1600 narzędzi do białego wywiadu.">
+    <meta name="twitter:image" content="https://twoja-domena.com/og-image.png"> <!-- Zmień na link do obrazka podglądu -->
+
+    <!-- Czcionki i Ikony -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
+    <!-- Główny arkusz stylów -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
 </head>
-<body>
+<body class="dark-theme">
 
+    <!-- Panel boczny z kategoriami -->
     <aside id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h3><i class="fas fa-sitemap"></i> Kategorie</h3>
-            <button id="random-tool-btn" class="sidebar-action-btn" title="Odkryj losowe narzędzie">
+            <button id="random-tool-btn" class="sidebar-action-btn" title="Odkryj losowe narzędzie" aria-label="Pokaż losowe narzędzie">
                 <i class="fas fa-dice"></i>
             </button>
         </div>
         <div id="mindmap-root" class="mindmap-root">
-            </div>
+            <!-- Mapa myśli generowana przez JavaScript -->
+        </div>
     </aside>
 
+    <!-- Główna zawartość strony -->
     <div class="main-content">
         <header class="main-header">
             <div class="header-container">
-                <button id="mobile-menu-btn" class="mobile-menu-btn">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Otwórz menu kategorii">
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Szukaj w ponad 1600 narzędziach...">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" placeholder="Szukaj w ponad 1600 narzędziach..." aria-label="Wyszukiwarka narzędzi">
                 </div>
                 <button id="theme-switcher" class="theme-btn" aria-label="Zmień motyw">
                     <i class="fas fa-sun"></i>
@@ -44,27 +71,51 @@
 
         <main id="content-area" class="content-area">
             <div class="content-header">
-                <h1 id="current-category-title">Wszystkie narzędzia</h1>
+                <h1 id="current-category-title">Wczytywanie...</h1>
                 <div class="header-controls">
-                    <span id="tool-count" class="tool-count"></span>
-                    <div class="view-switcher">
-                        <button id="view-grid-btn" class="view-btn active" title="Widok siatki"><i class="fas fa-th-large"></i></button>
-                        <button id="view-list-btn" class="view-btn" title="Widok listy"><i class="fas fa-th-list"></i></button>
+                    <span id="tool-count" class="tool-count" aria-live="polite"></span>
+                    <div class="view-switcher" role="group" aria-label="Przełącznik widoku">
+                        <button id="view-grid-btn" class="view-btn active" title="Widok siatki" aria-pressed="true"><i class="fas fa-th-large"></i></button>
+                        <button id="view-list-btn" class="view-btn" title="Widok listy" aria-pressed="false"><i class="fas fa-th-list"></i></button>
                     </div>
                 </div>
             </div>
             <section id="tools-container" class="tools-grid">
-                </section>
+                <!-- Wskaźnik ładowania, zostanie zastąpiony przez JS -->
+                <div class="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>Wczytywanie bazy narzędzi...</p>
+                </div>
+            </section>
         </main>
+
+        <footer class="main-footer">
+            <p>© 2024 OSINT Toolbox. Wszelkie prawa zastrzeżone.</p>
+        </footer>
     </div>
 
+    <!-- Modal do wyświetlania losowego narzędzia -->
     <div id="modal-container" class="modal-container">
-        <div class="modal-content">
-            <button id="modal-close-btn" class="modal-close-btn">&times;</button>
-            <div id="modal-body"></div>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button id="modal-close-btn" class="modal-close-btn" aria-label="Zamknij okno">×</button>
+            <div id="modal-body">
+                <!-- Treść modala generowana przez JavaScript -->
+            </div>
         </div>
     </div>
     
+    <!-- Banner z informacją o ciasteczkach -->
+    <div id="cookie-consent-banner" class="cookie-banner hidden">
+        <div class="cookie-content">
+            <p>
+                Używamy plików cookie, aby ulepszyć Twoje doświadczenie. Przechowujemy Twoje preferencje, takie jak ulubione narzędzia, oceny czy wybrany motyw. Kontynuując, zgadzasz się na ich użycie.
+            </p>
+            <button id="cookie-accept-btn" class="cookie-accept-button">Rozumiem</button>
+        </div>
+    </div>
+
+    <!-- Skrypt czatu Tawk.to (Opcjonalny) -->
+    <!-- WAŻNE: Zastąp 'YOUR_PROPERTY_ID' i 'YOUR_WIDGET_ID' swoimi danymi lub usuń ten skrypt. -->
     <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         (function() {
@@ -77,6 +128,8 @@
             s0.parentNode.insertBefore(s1, s0);
         })();
     </script>
-    <script src="script.js"></script>
+
+    <!-- Główny skrypt aplikacji - atrybut 'defer' poprawia wydajność ładowania -->
+    <script src="script.js" defer></script>
 </body>
 </html>
