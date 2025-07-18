@@ -29,14 +29,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const ls = {
         get: (key, fallback) => {
             const value = localStorage.getItem(key);
-            if (value == null) {
-                return fallback;
-            }
+            if (value == null) return fallback;
             try {
-                // Najpierw spróbuj sparsować jako JSON (dla list, obiektów itp.)
                 return JSON.parse(value);
             } catch (e) {
-                // Jeśli się nie uda, zwróć wartość jako zwykły tekst (dla motywu, widoku itp.)
                 return value;
             }
         },
@@ -46,18 +42,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const getRatings = () => ls.get('ratings', {});
     const getClickCounts = () => ls.get('clickCounts', {});
     const getViewMode = () => ls.get('viewMode', 'grid');
+    // NOWOŚĆ: Funkcja pomocnicza do podświetlania tekstu
+    const highlightText = (text, searchTerm) => {
+        if (!searchTerm) return text;
+        const regex = new RegExp(`(${searchTerm.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')})`, 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+    };
 
     // --- Inicjalizacja Podstawowych Funkcji (Motyw, Widok) ---
     (() => {
-        // Motyw
         const savedTheme = ls.get('theme', 'dark');
         if (savedTheme === 'light') dom.body.classList.add('light-theme');
         dom.themeSwitcher.addEventListener('click', () => {
             dom.body.classList.toggle('light-theme');
             ls.set('theme', dom.body.classList.contains('light-theme') ? 'light' : 'dark');
         });
-
-        // Widok
         if (getViewMode() === 'list') {
             dom.toolsContainer.className = 'tools-list';
             dom.viewGridBtn.classList.remove('active');
@@ -65,8 +64,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         dom.viewGridBtn.addEventListener('click', () => switchView('grid'));
         dom.viewListBtn.addEventListener('click', () => switchView('list'));
-
-        // Menu mobilne i modal
         dom.mobileMenuBtn.addEventListener('click', () => dom.sidebar.classList.toggle('is-open'));
         dom.modalCloseBtn.addEventListener('click', () => dom.modalContainer.classList.remove('is-open'));
         dom.randomToolBtn.addEventListener('click', showRandomTool);
@@ -80,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // --- Generowanie HTML ---
-    function generateToolCard(tool) {
+    // ZMIANA: Dodano argument `searchTerm` do podświetlania wyników
+    function generateToolCard(tool, searchTerm = '') {
         const favorites = getFavorites();
         const ratings = getRatings();
         const color = categoryColors[tool.category_slug] || '#9ca3af';
@@ -88,47 +86,66 @@ document.addEventListener('DOMContentLoaded', function () {
         const rating = ratings[tool.name] || 0;
         const isNew = (new Date() - new Date(tool.date_added)) / (1000 * 60 * 60 * 24) < 14;
 
+        // NOWOŚĆ: Podświetlanie nazwy i opisu
+        const highlightedName = highlightText(tool.name, searchTerm);
+        const highlightedDesc = highlightText(tool.description, searchTerm);
+
         return `
-            <div class="tool-card" data-tool-name="${tool.name}">
+            <div class="tool-card" data-tool-name="${tool.name}" data-tool-url="${tool.url}">
                 ${isNew ? '<span class="new-badge">Nowe!</span>' : ''}
                 <div class="tool-card-main">
                     <div class="tool-card-header">
-                        <h3>${tool.name}</h3>
+                        <h3>${highlightedName}</h3>
                         <button class="favorite-btn ${isFavorite ? 'is-favorite' : ''}" title="Dodaj do ulubionych">
                             <i class="fas fa-star"></i>
                         </button>
                     </div>
                     <p class="tool-category" style="--card-accent-color: ${color};">${tool.category}</p>
-                    <p class="tool-description">${tool.description}</p>
+                    <p class="tool-description">${highlightedDesc}</p>
                 </div>
                 <div class="tool-card-actions">
                     <div class="rating-stars" data-rating="${rating}">
                         ${[...Array(5)].map((_, i) => `<i class="fas fa-star ${i < rating ? 'is-rated' : ''}"></i>`).join('')}
                     </div>
-                    <a href="${tool.url}" target="_blank" class="tool-link"><i class="fas fa-external-link-alt"></i> Otwórz</a>
+                    <!-- NOWOŚĆ: Grupa przycisków i przycisk Kopiuj URL -->
+                    <div class="tool-actions-group">
+                        <button class="copy-btn" title="Kopiuj URL"><i class="fas fa-copy"></i></button>
+                        <a href="${tool.url}" target="_blank" class="tool-link"><i class="fas fa-external-link-alt"></i> Otwórz</a>
+                    </div>
                 </div>
             </div>`;
     }
 
-    function buildMindmapNode(item, isSpecial = false) {
+    // ZMIANA: Dodano argumenty `count` i `accentColor`
+    function buildMindmapNode(item, isSpecial = false, count = 0, accentColor = null) {
         const node = document.createElement('div');
         node.className = 'mindmap-node';
+        // NOWOŚĆ: Ustawienie koloru akcentu dla linii
+        if (accentColor) {
+            node.style.setProperty('--node-accent-color', accentColor);
+        }
+        
         const content = document.createElement('div');
         content.className = 'node-content';
         node.appendChild(content);
 
+        // NOWOŚĆ: Dodanie licznika do wyświetlania
+        const countSpan = count > 0 ? `<span class="node-count">(${count})</span>` : '';
+        const nameAndCount = `<span>${isSpecial ? item.icon + ' ' : ''}${item.name}</span>${countSpan}`;
+
         if (item.children?.length > 0) {
             content.classList.add('is-expandable');
-            content.innerHTML = `<i class="fas fa-angle-right"></i> ${item.name}`;
+            content.innerHTML = `<i class="fas fa-angle-right"></i> ${nameAndCount}`;
             const childrenContainer = document.createElement('div');
             childrenContainer.className = 'node-children';
             const innerDiv = document.createElement('div');
-            item.children.forEach(child => innerDiv.appendChild(buildMindmapNode(child)));
+            // Przekazanie koloru do dzieci
+            item.children.forEach(child => innerDiv.appendChild(buildMindmapNode(child, false, child.count, accentColor)));
             childrenContainer.appendChild(innerDiv);
             node.appendChild(childrenContainer);
             content.addEventListener('click', () => node.classList.toggle('is-expanded'));
         } else {
-            content.innerHTML = `${isSpecial ? item.icon + ' ' : ''}${item.name}`;
+            content.innerHTML = nameAndCount;
             content.dataset.categorySlug = item.slug;
             content.dataset.categoryName = item.name;
             content.addEventListener('click', handleCategorySelection);
@@ -137,27 +154,36 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateMindmap() {
-        // Definicje kategorii
+        // Obliczenia liczników
+        const categoryCounts = allTools.reduce((acc, tool) => {
+            acc[tool.category_slug] = (acc[tool.category_slug] || 0) + 1;
+            return acc;
+        }, {});
+
         const superCategoriesConfig = { 'Wyszukiwanie Osób': ['username', 'email', 'people', 'osoby', 'person', 'phone'], 'Analiza Techniczna': ['domain', 'ip', 'dns', 'siec', 'malware', 'exploit', 'vulnerabilities'], 'Obrazy i Media': ['image', 'video', 'obrazy', 'wideo', 'maps', 'mapy', 'geolokalizacja', 'metadata'], 'Biznes i Instytucje': ['business', 'firmy', 'rejestry', 'finanse', 'dane-publiczne', 'government'], 'Transport i Komunikacja': ['transport', 'lotnictwo', 'morski', 'pociagi', 'samochody', 'flight'], 'Inne Narzędzia': [] };
         const specialCategories = [
-            { name: 'Wszystkie narzędzia', slug: 'all', icon: '<i class="fas fa-grip-horizontal"></i>' },
-            { name: 'Ulubione', slug: 'favorites', icon: '<i class="fas fa-star" style="color:var(--yellow-star);"></i>' },
-            { name: 'Popularne', slug: 'popular', icon: '<i class="fas fa-fire" style="color:#f59e0b;"></i>' },
+            { name: 'Wszystkie narzędzia', slug: 'all', icon: '<i class="fas fa-grip-horizontal"></i>', count: allTools.length },
+            { name: 'Ulubione', slug: 'favorites', icon: '<i class="fas fa-star" style="color:var(--yellow-star);"></i>', count: getFavorites().length },
+            { name: 'Popularne', slug: 'popular', icon: '<i class="fas fa-fire" style="color:#f59e0b;"></i>', count: 10 },
             { name: 'Baza Wiedzy', slug: 'knowledge', icon: '<i class="fas fa-book-open"></i>' },
             { name: 'Statystyki', slug: 'stats', icon: '<i class="fas fa-chart-pie"></i>' },
         ];
         
-        // Dodaj kategorie specjalne
-        specialCategories.forEach(cat => dom.mindmapRoot.appendChild(buildMindmapNode(cat, true)));
+        specialCategories.forEach(cat => dom.mindmapRoot.appendChild(buildMindmapNode(cat, true, cat.count)));
         
-        // Przetwarzaj i dodaj kategorie narzędzi
-        const superCatMap = new Map(Object.keys(superCategoriesConfig).map(scName => [scName, { name: scName, children: [] }]));
+        let superCatColorIndex = 0;
+        const superCatMap = new Map();
+        Object.keys(superCategoriesConfig).forEach(scName => {
+            superCatMap.set(scName, { name: scName, children: [], color: colorPalette[superCatColorIndex++ % colorPalette.length] });
+        });
+        
         const uniqueCategories = new Map();
         allTools.forEach(tool => {
             if (!uniqueCategories.has(tool.category_slug)) {
-                uniqueCategories.set(tool.category_slug, { name: tool.category, slug: tool.category_slug });
+                uniqueCategories.set(tool.category_slug, { name: tool.category, slug: tool.category_slug, count: categoryCounts[tool.category_slug] });
             }
         });
+
         uniqueCategories.forEach(cat => {
             let assigned = false;
             for (const [scName, keywords] of Object.entries(superCategoriesConfig)) {
@@ -169,10 +195,12 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             if (!assigned) superCatMap.get('Inne Narzędzia').children.push(cat);
         });
+
         superCatMap.forEach(superCat => {
             if (superCat.children.length > 0) {
+                const totalCount = superCat.children.reduce((sum, child) => sum + (child.count || 0), 0);
                 superCat.children.sort((a, b) => a.name.localeCompare(b.name));
-                dom.mindmapRoot.appendChild(buildMindmapNode(superCat));
+                dom.mindmapRoot.appendChild(buildMindmapNode(superCat, false, totalCount, superCat.color));
             }
         });
     }
@@ -202,14 +230,11 @@ document.addEventListener('DOMContentLoaded', function () {
             renderStats();
         } else {
             let toolsToDisplay = [];
-            if (slug === 'all') {
-                toolsToDisplay = allTools;
-            } else if (slug === 'favorites') {
-                const favorites = getFavorites();
-                toolsToDisplay = allTools.filter(t => favorites.includes(t.name));
-            } else if (slug === 'popular') {
+            if (slug === 'all') toolsToDisplay = allTools;
+            else if (slug === 'favorites') toolsToDisplay = allTools.filter(t => getFavorites().includes(t.name));
+            else if (slug === 'popular') {
                 const counts = getClickCounts();
-                toolsToDisplay = allTools.sort((a, b) => (counts[b.name] || 0) - (counts[a.name] || 0)).slice(0, 10);
+                toolsToDisplay = [...allTools].sort((a, b) => (counts[b.name] || 0) - (counts[a.name] || 0)).slice(0, 10);
             } else {
                 toolsToDisplay = allTools.filter(t => t.category_slug === slug);
             }
@@ -220,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             dom.toolCount.textContent = `${filteredTools.length} narzędzi`;
             if (filteredTools.length > 0) {
-                dom.toolsContainer.innerHTML = filteredTools.map(generateToolCard).join('');
+                dom.toolsContainer.innerHTML = filteredTools.map(tool => generateToolCard(tool, searchTerm)).join('');
             } else {
                 dom.toolsContainer.innerHTML = '<p class="no-results">😢 Brak wyników dla podanych kryteriów.</p>';
             }
@@ -239,25 +264,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }, {});
         const sortedCategories = Object.entries(categoryCounts).sort(([, a], [, b]) => b - a);
         const maxCount = sortedCategories.length > 0 ? sortedCategories[0][1] : 1;
-
         let statsHTML = `<div class="stats-container"><h3>Narzędzia wg kategorii</h3>`;
         sortedCategories.forEach(([name, count]) => {
             const width = (count / maxCount) * 100;
-            statsHTML += `
-                <div class="stat-bar">
-                    <span class="stat-bar-label">${name} (${count})</span>
-                    <div class="stat-bar-progress"><div class="stat-bar-fill" style="width: ${width}%;"></div></div>
-                </div>`;
+            statsHTML += `<div class="stat-bar"><span class="stat-bar-label">${name} (${count})</span><div class="stat-bar-progress"><div class="stat-bar-fill" style="width: ${width}%;"></div></div></div>`;
         });
         statsHTML += `</div>`;
-        
         dom.toolsContainer.innerHTML = statsHTML;
         dom.toolCount.textContent = `Łącznie ${allTools.length} narzędzi`;
     }
 
     // --- Interakcje Użytkownika ---
     dom.toolsContainer.addEventListener('click', e => {
-        // Ulubione
         const favBtn = e.target.closest('.favorite-btn');
         if (favBtn) {
             const card = favBtn.closest('.tool-card');
@@ -269,33 +287,50 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 favorites.push(toolName);
                 favBtn.classList.add('is-favorite');
+                // NOWOŚĆ: Animacja pulsowania
+                favBtn.classList.add('pulsing');
+                favBtn.addEventListener('animationend', () => favBtn.classList.remove('pulsing'), { once: true });
             }
             ls.set('favorites', favorites);
         }
 
-        // Oceny
         const star = e.target.closest('.rating-stars .fa-star');
         if (star) {
             const ratingContainer = star.parentElement;
-            const card = ratingContainer.closest('.tool-card');
-            const toolName = card.dataset.toolName;
+            const toolName = ratingContainer.closest('.tool-card').dataset.toolName;
             const newRating = [...ratingContainer.children].indexOf(star) + 1;
-            
             let ratings = getRatings();
             ratings[toolName] = newRating;
             ls.set('ratings', ratings);
-            
-            // Zaktualizuj wygląd gwiazdek
             [...ratingContainer.children].forEach((s, i) => s.classList.toggle('is-rated', i < newRating));
         }
 
-        // Zliczanie kliknięć
         const link = e.target.closest('.tool-link');
         if(link) {
             const toolName = link.closest('.tool-card').dataset.toolName;
             let counts = getClickCounts();
             counts[toolName] = (counts[toolName] || 0) + 1;
             ls.set('clickCounts', counts);
+        }
+        
+        // NOWOŚĆ: Obsługa przycisku Kopiuj URL
+        const copyBtn = e.target.closest('.copy-btn');
+        if (copyBtn) {
+            const toolUrl = copyBtn.closest('.tool-card').dataset.toolUrl;
+            navigator.clipboard.writeText(toolUrl).then(() => {
+                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+                copyBtn.classList.add('copied');
+                copyBtn.dataset.tooltip = 'Skopiowano!';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = '<i class="fas fa-copy"></i>';
+                    copyBtn.classList.remove('copied');
+                    copyBtn.removeAttribute('data-tooltip');
+                }, 1500);
+            }).catch(err => {
+                console.error('Błąd kopiowania:', err);
+                copyBtn.dataset.tooltip = 'Błąd!';
+            });
         }
     });
 
@@ -313,13 +348,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) throw new Error(`Błąd HTTP: ${response.status}`);
             const toolsData = await response.json();
             
-            // Symulacja daty dodania dla funkcji "Nowe!"
             allTools = toolsData.map((tool, index) => ({
                 ...tool,
                 date_added: new Date(new Date().setDate(new Date().getDate() - (toolsData.length - index))).toISOString(),
             }));
 
-            // Inicjalizacja kolorów
             const uniqueCategories = [...new Set(allTools.map(t => t.category_slug))];
             uniqueCategories.forEach(slug => categoryColors[slug] = colorPalette[colorIndex++ % colorPalette.length]);
             
