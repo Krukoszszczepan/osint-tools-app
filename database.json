@@ -11779,5 +11779,1027 @@
     "description": "Obszerna, stale aktualizowana lista linków i narzędzi (tzw. 'wiki'), obejmująca szeroki zakres tematów, od oprogramowania po zasoby multimedialne.",
     "category": "Additional Resources",
     "category_slug": "additional-resources"
+  },
+  {
+    "name": "Spicetify",
+    "url": "https://github.com/khanhas/spicetify-cli",
+    "description": "Niestandardowy design i rozszerzone funkcje dla aplikacji Spotify na systemie Windows.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "Spoti-Library",
+    "url": "https://spoti-library.netlify.app/",
+    "description": "Biblioteka pozwalająca śledzić nowości muzyczne od obserwowanych artystów na Spotify.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "psst",
+    "url": "https://github.com/jpochyla/psst",
+    "description": "Alternatywny, lekki klient Spotify napisany w języku Rust.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "SpotifyDown",
+    "url": "https://spotifydown.com",
+    "description": "Serwis online do pobierania muzyki z serwisu Spotify na podstawie linków do utworów.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Spotfy.one",
+    "url": "https://spotfy.one/",
+    "description": "Darmowa, webowa alternatywa dla Spotify, nie wymagająca konta.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "Soggfy",
+    "url": "https://github.com/Rafiuth/Soggfy",
+    "description": "Program do pobierania utworów ze Spotify w formacie MP3.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "BlockTheSpot",
+    "url": "https://github.com/mrpond/BlockTheSpot",
+    "description": "Narzędzie do blokowania reklam i nielimitowanego przewijania piosenek w programie Spotify.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "xManager",
+    "url": "https://xmanagerapp.com/",
+    "description": "Aplikacja na Androida do zarządzania i instalowania zmodyfikowanych wersji aplikacji Spotify.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "SpotMyBackup",
+    "url": "http://www.spotmybackup.com/",
+    "description": "Narzędzie do eksportowania i tworzenia kopii zapasowych playlist i utworów ze Spotify do pliku.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "PreMiD",
+    "url": "https://premid.app/",
+    "description": "Proste narzędzie pozwalające pokazać, co teraz robisz w sieci, na twoim statusie w Discordzie.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "BetterDiscord",
+    "url": "https://betterdiscord.app/",
+    "description": "Zmodyfikowany klient Discord z dodatkowymi funkcjami, motywami i wtyczkami.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "Aliucord",
+    "url": "https://github.com/Aliucord/Aliucord",
+    "description": "Zmodyfikowana, otwartoźródłowa aplikacja Discord na system Android.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "InstaParty",
+    "url": "https://instaparty.gg/",
+    "description": "Platforma generująca tymczasowy, indywidualny serwer Discord na czas rozmów.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "Discord 3rd Parties",
+    "url": "https://github.com/Discord-Client-Encyclopedia-Management/Discord3rdparties",
+    "description": "Encyklopedia i zbiór klientów zewnętrznych oraz modyfikacji do Discorda.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "Discord All-Tools-In-One",
+    "url": "https://github.com/AstraaDev/Discord-All-Tools-In-One",
+    "description": "Skrypt zawierający 23 narzędzia do Discorda, w tym narzędzia ofensywne (RAT, Raid Tool, Token Grabber).",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "Undiscord",
+    "url": "https://victornpb.github.io/undiscord/",
+    "description": "Skrypt do masowego usuwania wiadomości na kanałach i w rozmowach prywatnych na Discordzie.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "ZeroDiscord",
+    "url": "https://github.com/hanaui-git/ZeroDiscord",
+    "description": "Zbiór hacków, exploitów i narzędzi do Discorda stworzony w NodeJS.",
+    "category": "Discord",
+    "category_slug": "discord"
+  },
+  {
+    "name": "Prospector.cz",
+    "url": "https://www.prospector.cz/",
+    "description": "Zbiór linków i zasobów, głównie o tematyce warez i mediów.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Pilssken's Warez List",
+    "url": "https://pilssken.neocities.org/warez/",
+    "description": "Kolekcja linków do stron z oprogramowaniem i mediami (warez).",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "FREEMEDIAHECKYEAH Wiki",
+    "url": "https://www.reddit.com/r/FREEMEDIAHECKYEAH/wiki/index",
+    "description": "Ogromna, kuratorowana lista linków do darmowych mediów, oprogramowania i zasobów online.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Piracy",
+    "url": "https://github.com/Shakil-Shahadat/awesome-piracy",
+    "description": "Lista 'awesome' zawierająca oprogramowanie, strony i zasoby związane z piractwem cyfrowym.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome JavaScript",
+    "url": "https://github.com/sorrycc/awesome-javascript",
+    "description": "Zbiór wspaniałych bibliotek, zasobów i frameworków JavaScript.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome React Components",
+    "url": "https://github.com/brillout/awesome-react-components",
+    "description": "Kuratorowana lista komponentów i bibliotek dla frameworka React.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Materiały do nauki C++",
+    "url": "https://github.com/SteelPh0enix/kurscpp/wiki/materialy-do-nauki",
+    "description": "Zbiór linków i materiałów do nauki programowania w języku C++.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Build Your Own X",
+    "url": "https://github.com/danistefanovic/build-your-own-x",
+    "description": "Kolekcja tutoriali pokazujących jak zbudować od podstaw własne technologie (np. bazę danych, system operacyjny).",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Links (CodersCommunity)",
+    "url": "https://github.com/CodersCommunity/awesome-links",
+    "description": "Lista przydatnych linków dla programistów, podzielona na różne kategorie.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Linux Software",
+    "url": "https://luong-komorebi.github.io/Awesome-Linux-Software/",
+    "description": "Kuratorowana lista najlepszego oprogramowania dla systemu operacyjnego Linux.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Windows",
+    "url": "https://github.com/Awesome-Windows/Awesome",
+    "description": "Kuratorowana lista najlepszego oprogramowania i narzędzi dla systemu Windows.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Links (jerolimov)",
+    "url": "https://github.com/jerolimov/awesome-links",
+    "description": "Kolejna obszerna lista przydatnych linków dla deweloperów.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Bot Status",
+    "url": "https://github.com/dkhamsing/awesome_bot/blob/master/status/status.md",
+    "description": "Strona statusowa bota sprawdzającego poprawność linków w listach 'awesome' na GitHubie.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome (sindresorhus)",
+    "url": "https://github.com/sindresorhus/awesome",
+    "description": "Meta-lista, która agreguje wszystkie inne listy typu 'awesome'. Punkt startowy do odkrywania zasobów.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Awesome Pirated Games",
+    "url": "https://onehack.us/t/awesome-pirated-games-mega-collection-resources/222867",
+    "description": "Wielka kolekcja zasobów i linków do pobierania pirackich gier.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Champagne",
+    "url": "https://champagne.pages.dev/",
+    "description": "Estetyczna strona startowa z kolekcją linków do różnych zasobów warezowych.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "CrackWatch.eu",
+    "url": "https://crackwatch.eu/",
+    "description": "Strona monitorująca status złamania zabezpieczeń (crack) w grach komputerowych.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "GameStatus.info",
+    "url": "https://gamestatus.info/?lg=en",
+    "description": "Serwis informujący o statusie zabezpieczeń Denuvo i cracków dla najnowszych gier.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "r/CrackWatch",
+    "url": "https://www.reddit.com/r/CrackWatch/",
+    "description": "Subreddit poświęcony dyskusjom na temat łamania zabezpieczeń w grach i sceny warez.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "OceanOfGames",
+    "url": "http://oceanofgames.com/",
+    "description": "Strona z grami do pobrania, często zawierająca wersje pre-cracked.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "CPY-Skidrow",
+    "url": "https://cpyskidrow.com/",
+    "description": "Strona agregująca wydania gier od znanych grup scenowych, takich jak CPY i Skidrow.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "T-Clock",
+    "url": "https://github.com/White-Tiger/T-Clock",
+    "description": "Narzędzie do zaawansowanej personalizacji zegara na pasku zadań systemu Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "TaskbarX",
+    "url": "https://chrisandriessen.nl/taskbarx",
+    "description": "Aplikacja do centrowania ikon na pasku zadań Windows i jego dalszej personalizacji.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Awesome Captcha",
+    "url": "https://zyszys.github.io/awesome-captcha/README-pl.html",
+    "description": "Kuratorowana lista zasobów i bibliotek związanych z systemami CAPTCHA.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "AOPC",
+    "url": "https://aopc.dev/",
+    "description": "Forum społecznościowe poświęcone głównie projektom instalacji systemu Android na komputerach PC (Android-x86).",
+    "category": "Forum Search Engines",
+    "category_slug": "forum-search-engines"
+  },
+  {
+    "name": "Text to Handwriting",
+    "url": "https://saurabhdaware.github.io/text-to-handwriting",
+    "description": "Konwerter online, który przekształca tekst cyfrowy w realistycznie wyglądające pismo odręczne.",
+    "category": "Narzędzia Tekstowe",
+    "category_slug": "text"
+  },
+  {
+    "name": "Wykop Wołacz",
+    "url": "https://klocus.pl/wolacz",
+    "description": "Narzędzie do automatycznego wołania (tagowania) użytkowników, którzy zaplusowali dany wpis na Wykop.pl.",
+    "category": "Inne Narzędzia",
+    "category_slug": "narzedzia"
+  },
+  {
+    "name": "HandBrake",
+    "url": "https://handbrake.fr/",
+    "description": "Potężny, otwartoźródłowy konwerter plików wideo do różnych formatów.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Resoomer",
+    "url": "https://resoomer.com/pl",
+    "description": "Narzędzie online do automatycznego tworzenia streszczeń i skrótów długich tekstów.",
+    "category": "Narzędzia AI",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "RocketDock",
+    "url": "https://punklabs.com/",
+    "description": "Popularny, animowany dock (pasek skrótów) dla systemu Windows, wzorowany na tym z macOS.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "tmpfiles.org",
+    "url": "https://tmpfiles.org/",
+    "description": "Tymczasowy hosting plików z limitem 100 MB, 999 pobrań lub 120 minut.",
+    "category": "Przechowywanie Plików",
+    "category_slug": "przechowywanie"
+  },
+  {
+    "name": "MultiUp.org",
+    "url": "https://multiup.org/",
+    "description": "Serwis umożliwiający jednoczesne wysłanie pliku na wiele różnych hostingów.",
+    "category": "Przechowywanie Plików",
+    "category_slug": "przechowywanie"
+  },
+  {
+    "name": "FilePursuit",
+    "url": "https://filepursuit.com/",
+    "description": "Wyszukiwarka plików audio, wideo, ebooków, ISO, aplikacji mobilnych i archiwów ZIP na serwerach publicznych.",
+    "category": "Wyszukiwarki Plików",
+    "category_slug": "file-search"
+  },
+  {
+    "name": "Black Screen",
+    "url": "https://blackscreen.app/",
+    "description": "Prosta strona wyświetlająca czarny ekran, przydatna np. podczas oglądania filmów przez HDMI na TV.",
+    "category": "Inne Narzędzia",
+    "category_slug": "narzedzia"
+  },
+  {
+    "name": "Instrukcja czyszczenia DNS",
+    "url": "https://www.instalki.pl/demonstracje/internet/25405-err-empty-response.html",
+    "description": "Poradnik krok po kroku, jak wyczyścić pamięć podręczną DNS w systemie Windows, aby rozwiązać problemy z połączeniem.",
+    "category": "Poradniki Wyszukiwania",
+    "category_slug": "search-engine-guides"
+  },
+  {
+    "name": "Polska Scena Translacyjna",
+    "url": "https://polskascenatranslacyjna-spis.blogspot.com/",
+    "description": "Zbiór informacji i linków do stron o komiksach i ich amatorskich tłumaczeniach (skanlacjach).",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Przewodnik po GIT",
+    "url": "https://rogerdudler.github.io/git-guide/index.pl.html",
+    "description": "Prosty i zwięzły przewodnik po podstawowych komendach systemu kontroli wersji GIT.",
+    "category": "Poradniki Wyszukiwania",
+    "category_slug": "search-engine-guides"
+  },
+  {
+    "name": "TinyVid",
+    "url": "https://kamua.com/tinyvid/",
+    "description": "Narzędzie online do kompresji plików wideo w celu zmniejszenia ich rozmiaru.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Vandal",
+    "url": "https://vegetableman.github.io/vandal/",
+    "description": "Wtyczka do przeglądarki pozwalająca szybko przeglądać historię edycji stron w serwisach opartych na MediaWiki.",
+    "category": "Narzędzia Przeglądarkowe",
+    "category_slug": "web-browsing"
+  },
+  {
+    "name": "YouTube Music (Desktop)",
+    "url": "https://github.com/th-ch/youtube-music/",
+    "description": "Nieoficjalna aplikacja desktopowa YouTube Music z wbudowanym adblockerem.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "Snapdrop",
+    "url": "https://snapdrop.net/",
+    "description": "Webowa aplikacja do szybkiego przesyłania plików między urządzeniami w tej samej sieci lokalnej.",
+    "category": "Przechowywanie Plików",
+    "category_slug": "przechowywanie"
+  },
+  {
+    "name": "TLD List",
+    "url": "https://pl.tld-list.com/",
+    "description": "Porównywarka cen rejestracji, transferu i odnowień domen internetowych u różnych rejestratorów.",
+    "category": "Domeny i Sieć",
+    "category_slug": "domeny"
+  },
+  {
+    "name": "Microsoft Update Catalog",
+    "url": "https://www.catalog.update.microsoft.com/Search.aspx?q=KB000",
+    "description": "Oficjalny katalog aktualizacji systemu Windows, umożliwiający manualne pobieranie poprawek.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Gofile.io",
+    "url": "https://gofile.io/",
+    "description": "Darmowa i nielimitowana platforma do przechowywania i udostępniania plików online.",
+    "category": "Przechowywanie Plików",
+    "category_slug": "przechowywanie"
+  },
+  {
+    "name": "CDA.PL Folder Downloader",
+    "url": "https://github.com/Bartixxx32/CDA.PL-Folder-Downloader",
+    "description": "Skrypt w Pythonie do pobierania całych folderów z serwisu CDA.pl.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "SIP Softphone",
+    "url": "https://play.google.com/store/apps/details?id=pl.rs.sip.softphone.newapp",
+    "description": "Aplikacja oferująca tymczasowy numer telefonu na 3 dni, przydatna do weryfikacji w serwisach.",
+    "category": "Numery Telefonów",
+    "category_slug": "telephone-numbers"
+  },
+  {
+    "name": "Hiren's Boot CD",
+    "url": "https://www.hirensbootcd.org/",
+    "description": "Rozruchowa płyta ratunkowa z systemem Windows PE i zestawem narzędzi diagnostycznych i naprawczych.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Reproductor M3U8 - HLS Player",
+    "url": "https://chrome.google.com/webstore/detail/reproductor-m3u8-hls-%20-da/lcipembjfkmeggpihdpdgnjildgniffl",
+    "description": "Wtyczka do Chrome pozwalająca odtwarzać strumienie wideo na żywo w formacie HLS (.m3u8).",
+    "category": "Narzędzia Przeglądarkowe",
+    "category_slug": "web-browsing"
+  },
+  {
+    "name": "ModernWiki",
+    "url": "https://www.modernwiki.app/",
+    "description": "Wtyczka do przeglądarki, która odświeża i modernizuje interfejs Wikipedii.",
+    "category": "Narzędzia Przeglądarkowe",
+    "category_slug": "web-browsing"
+  },
+  {
+    "name": "CloudStream",
+    "url": "https://github.com/recloudstream/cloudstream",
+    "description": "Aplikacja na Androida do oglądania i pobierania filmów/seriali z wielu źródeł.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Portable Appz",
+    "url": "https://portableappz.blogspot.com/",
+    "description": "Blog udostępniający oprogramowanie w wersjach przenośnych (portable), niewymagających instalacji.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Portapps",
+    "url": "https://portapps.io/apps/",
+    "description": "Kolekcja otwartoźródłowych aplikacji w wersjach przenośnych (portable) dla systemu Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Portable.info.pl",
+    "url": "https://portable.info.pl/",
+    "description": "Polski portal z programami w wersjach przenośnych (portable).",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "WhereGoes",
+    "url": "https://wheregoes.com/",
+    "description": "Narzędzie online, które odkrywa docelowy adres URL skróconego linku, pokazując całą ścieżkę przekierowań.",
+    "category": "Rozwijanie Skróconych Linków",
+    "category_slug": "url-expanders"
+  },
+  {
+    "name": "NBNG",
+    "url": "https://noemata.net/nbng/",
+    "description": "Generator losowych, ale sensownie brzmiących nazw, przydatny przy tworzeniu projektów lub firm.",
+    "category": "Inne Narzędzia",
+    "category_slug": "narzedzia"
+  },
+  {
+    "name": "Windows Repair (All In One)",
+    "url": "https://www.tweaking.com/content/page/windows_repair_all_in_one.html",
+    "description": "Kompleksowe narzędzie do naprawy szerokiej gamy problemów i błędów w systemie Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "BaseWin.pl",
+    "url": "https://basewin.pl/",
+    "description": "Polska baza obrazów ISO z różnymi wersjami systemów operacyjnych.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "GetCID",
+    "url": "https://getcid.info/",
+    "description": "Serwis umożliwiający aktywację telefoniczną systemów Windows bez zmiany klucza produktu.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "Jellyfin",
+    "url": "https://jellyfin.org/",
+    "description": "Otwartoźródłowy serwer mediów, stanowiący alternatywę dla PLEX i Kodi.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Ninite",
+    "url": "https://ninite.com/",
+    "description": "Serwis pozwalający na szybką i zautomatyzowaną instalację wielu popularnych programów za jednym razem.",
+    "category": "Automatyzacja OSINT",
+    "category_slug": "osint-automation"
+  },
+  {
+    "name": "WatermarkRemover.io",
+    "url": "https://www.watermarkremover.io/",
+    "description": "Narzędzie online wykorzystujące AI do usuwania znaków wodnych ze zdjęć.",
+    "category": "Narzędzia do Obrazów (OCR)",
+    "category_slug": "pictures"
+  },
+  {
+    "name": "Z-O-O-M.eu",
+    "url": "https://z-o-o-m.eu/",
+    "description": "Multiuploader plików, który wysyła pliki na wiele serwisów hostingowych jednocześnie.",
+    "category": "Przechowywanie Plików",
+    "category_slug": "przechowywanie"
+  },
+  {
+    "name": "Soulseek",
+    "url": "http://www.slsknet.org/",
+    "description": "Darmowa sieć P2P do udostępniania plików, wolna od reklam i spyware, popularna wśród kolekcjonerów muzyki.",
+    "category": "Wyszukiwarki Plików",
+    "category_slug": "file-search"
+  },
+  {
+    "name": "Web DL Tools",
+    "url": "https://web-dl-tools.github.io/",
+    "description": "Zestaw narzędzi do pobierania treści audio i wideo z serwisów streamingowych oraz torrentów.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "FreakDay.pl",
+    "url": "https://freakday.pl/",
+    "description": "Kalendarz nietypowych świąt i popularnych wydarzeń w Polsce.",
+    "category": "Inne",
+    "category_slug": "narzedzia"
+  },
+  {
+    "name": "WinClub.pl",
+    "url": "https://winclub.pl/",
+    "description": "Jedno z największych polskich forów internetowych poświęconych systemowi Windows.",
+    "category": "Forum Search Engines",
+    "category_slug": "forum-search-engines"
+  },
+  {
+    "name": "Flow Launcher",
+    "url": "https://github.com/Flow-Launcher/Flow.Launcher",
+    "description": "Alternatywny program uruchamiający dla Windows, rozszerzalny za pomocą wtyczek społeczności.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "12ft.io",
+    "url": "https://12ft.io/",
+    "description": "Narzędzie pozwalające omijać paywalle na stronach z artykułami (działa poprzez usunięcie blokady CSS).",
+    "category": "Narzędzia Przeglądarkowe",
+    "category_slug": "web-browsing"
+  },
+  {
+    "name": "Bitmovin Stream Test",
+    "url": "https://bitmovin.com/demos/stream-test?format=progressive&manifest=",
+    "description": "Odtwarzacz online do testowania różnych formatów strumieni wideo, w tym HLS (m3u8) i DASH (mpd).",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "PrivaZer",
+    "url": "https://privazer.com/pl/",
+    "description": "Darmowy program, który dokładnie czyści komputer ze śladów aktywności i nadpisuje wolne miejsce.",
+    "category": "Prywatność i Usuwanie Danych",
+    "category_slug": "privacy--clean-up"
+  },
+  {
+    "name": "BleachBit",
+    "url": "https://www.bleachbit.org/",
+    "description": "Otwartoźródłowe narzędzie do czyszczenia systemu i ochrony prywatności poprzez usuwanie zbędnych plików.",
+    "category": "Prywatność i Usuwanie Danych",
+    "category_slug": "privacy--clean-up"
+  },
+  {
+    "name": "MS Gituides",
+    "url": "https://msguides.com/",
+    "description": "Strona z przewodnikami i skryptami do bezpłatnej aktywacji produktów Microsoft (Windows, Office).",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "SponsorBlock",
+    "url": "https://sponsor.ajay.app/",
+    "description": "Rozszerzenie do przeglądarki, które automatycznie pomija segmenty sponsorowane w filmach na YouTube.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "Imginn",
+    "url": "https://imginn.org/",
+    "description": "Anonimowa przeglądarka profili na Instagramie, umożliwiająca oglądanie treści bez posiadania konta.",
+    "category": "Instagram",
+    "category_slug": "instagram"
+  },
+  {
+    "name": "Rainmeter",
+    "url": "https://www.rainmeter.net/",
+    "description": "Platforma do tworzenia i wyświetlania wysoce konfigurowalnych widżetów na pulpicie systemu Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "NewPipe",
+    "url": "https://newpipe.net/",
+    "description": "Lekki, alternatywny klient YouTube na system Android, bez reklam i z możliwością odtwarzania w tle.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "IPTV Lister",
+    "url": "https://iptvlister.com/category/poland/",
+    "description": "Serwis udostępniający darmowe listy kanałów IPTV, w tym polskie.",
+    "category": "IPTV i Radio",
+    "category_slug": "iptv-radio"
+  },
+  {
+    "name": "Premium Link Generators",
+    "url": "https://www.reddit.com/r/WarezResources/comments/bdhput/premium_link_generators/",
+    "description": "Lista stron, które za darmo generują linki premium z popularnych serwisów hostingowych (często z limitami).",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "F-Droid",
+    "url": "https://f-droid.org/pl/",
+    "description": "Alternatywny sklep z aplikacjami na system Android, zawierający wyłącznie darmowe i otwartoźródłowe oprogramowanie.",
+    "category": "Android",
+    "category_slug": "android"
+  },
+  {
+    "name": "KaranPC",
+    "url": "https://karanpc.com/blog/",
+    "description": "Blog udostępniający scrackowane wersje popularnych programów.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "Privacy.sexy",
+    "url": "https://privacy.sexy/",
+    "description": "Zestaw skryptów umożliwiających wdrożenie najlepszych praktyk prywatności i bezpieczeństwa w systemach Windows i macOS.",
+    "category": "Prywatność i Usuwanie Danych",
+    "category_slug": "privacy--clean-up"
+  },
+  {
+    "name": "Skrybot.pl",
+    "url": "https://skrybot.pl/",
+    "description": "Generator napisów do filmów z YouTube, wykorzystujący technologię rozpoznawania mowy.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "VODSubDL",
+    "url": "https://github.com/TheRadziu/VODSubDL",
+    "description": "Skrypt do pobierania materiałów wideo (bez zabezpieczeń DRM) z serwisu TVP VOD.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Snappy Driver Installer",
+    "url": "https://sdi-tool.org/",
+    "description": "Darmowe, przenośne narzędzie do aktualizacji sterowników dla systemu Windows, działające również w trybie offline.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Microsoft PowerToys",
+    "url": "https://learn.microsoft.com/en-us/windows/powertoys/",
+    "description": "Zestaw zaawansowanych narzędzi od Microsoftu, rozszerzających funkcjonalność systemu Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Emailnator",
+    "url": "https://www.emailnator.com/",
+    "description": "Generator tymczasowych adresów e-mail, w tym z domeną Gmail, z funkcją automatycznego czytania linków w wiadomościach.",
+    "category": "Tymczasowe Adresy E-mail",
+    "category_slug": "tymczasowe-skrzynki-e-mail"
+  },
+  {
+    "name": "FileKuy",
+    "url": "https://filekuy.com/",
+    "description": "Strona do pobierania pełnych wersji programów i gier.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "ModernFlyouts",
+    "url": "https://www.microsoft.com/pl-pl/p/modernflyouts-preview/9mt60qv066rp",
+    "description": "Aplikacja zastępująca domyślne, wyskakujące okienka (np. głośności, jasności) w Windows na nowocześniejsze.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "Writesonic",
+    "url": "https://app.writesonic.com/pl/",
+    "description": "Platforma AI do pisania, która oferuje czat połączony z aktualnymi danymi z internetu, stanowiąc alternatywę dla ChatGPT.",
+    "category": "Narzędzia AI",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "docker-py-revanced",
+    "url": "https://github.com/nikhilbadyal/docker-py-revanced",
+    "description": "Narzędzie typu 'Python One Click' do łatwego tworzenia zmodyfikowanych aplikacji, np. YouTube ReVanced.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "You.com",
+    "url": "https://you.com",
+    "description": "Prywatna wyszukiwarka internetowa bazująca na AI, z własnym czatem i konfigurowalnymi źródłami.",
+    "category": "Narzędzia AI",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "yt-dlp",
+    "url": "https://github.com/yt-dlp/yt-dlp",
+    "description": "Ulepszona wersja popularnego narzędzia youtube-dl, z dodatkowymi funkcjami i poprawkami do pobierania wideo.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Heroic Games Launcher",
+    "url": "https://heroicgameslauncher.com/",
+    "description": "Otwartoźródłowy launcher gier, który integruje biblioteki z Epic Games, GOG i Amazon na platformach Linux, macOS i Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "PrivacyTools.io",
+    "url": "https://www.privacytools.io/",
+    "description": "Zbiór rekomendowanych narzędzi i usług chroniących prywatność online, od przeglądarek po systemy operacyjne.",
+    "category": "Prywatność i Usuwanie Danych",
+    "category_slug": "privacy--clean-up"
+  },
+  {
+    "name": "RuntimePack",
+    "url": "https://www.majorgeeks.com/files/details/runtimepack.html",
+    "description": "Zestaw bibliotek i komponentów (DLL, OCX) do naprawy błędów związanych z ich brakiem w systemie Windows.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "ChatGPT",
+    "url": "https://chat.openai.com/chat",
+    "description": "Zaawansowany model językowy od OpenAI, zdolny do prowadzenia rozmów, pisania tekstów i odpowiadania na pytania.",
+    "category": "Narzędzia AI",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "DALL·E 2",
+    "url": "https://labs.openai.com/",
+    "description": "Platforma od OpenAI do generowania obrazów z tekstu za pomocą sztucznej inteligencji.",
+    "category": "Narzędzia AI",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Radio-Browser",
+    "url": "https://www.radio-browser.info/",
+    "description": "Społecznościowa baza danych stacji radiowych z całego świata, z linkami do bezpośrednich strumieni.",
+    "category": "IPTV i Radio",
+    "category_slug": "iptv-radio"
+  },
+  {
+    "name": "MiXLab",
+    "url": "https://colab.research.google.com/github/shirooo39/MiXLab/blob/master/MiXLab.ipynb",
+    "description": "Zeszyt Google Colab z listą ciekawych skryptów, narzędzi i zasobów, głównie dla deweloperów.",
+    "category": "Listy 'Awesome'",
+    "category_slug": "awesome-lists"
+  },
+  {
+    "name": "Public DNS",
+    "url": "https://www.publicdns.xyz/",
+    "description": "Obszerna, przeszukiwalna lista publicznych serwerów DNS z całego świata.",
+    "category": "Domeny i Sieć",
+    "category_slug": "domeny"
+  },
+  {
+    "name": "Control D",
+    "url": "https://controld.com/",
+    "description": "Konfigurowalna usługa DNS, która poprawia prywatność, blokuje niechciane treści i pozwala na fałszowanie lokalizacji.",
+    "category": "Prywatność i Usuwanie Danych",
+    "category_slug": "privacy--clean-up"
+  },
+  {
+    "name": "StreamFab",
+    "url": "https://streamfab.com/",
+    "description": "Oprogramowanie do pobierania filmów i seriali z popularnych serwisów VOD.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "FreeGrabApp",
+    "url": "https://freegrabapp.com/pl/product/flixgrab/?amp",
+    "description": "Aplikacja do pobierania treści wideo z serwisów streamingowych takich jak Netflix.",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "SteamDB Free Games",
+    "url": "https://steamdb.info/upcoming/free/",
+    "description": "Lista nadchodzących i aktualnie dostępnych darmowych gier na platformie Steam.",
+    "category": "Gry i Trening",
+    "category_slug": "games"
+  },
+  {
+    "name": "Platinmods",
+    "url": "https://platinmods.com/",
+    "description": "Forum z modyfikowanymi aplikacjami i grami na systemy Android i iOS.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "Cleanup.pictures",
+    "url": "https://cleanup.pictures/",
+    "description": "Narzędzie AI do szybkiego usuwania niechcianych obiektów, osób lub tekstu ze zdjęć.",
+    "category": "Narzędzia do Obrazów (OCR)",
+    "category_slug": "pictures"
+  },
+  {
+    "name": "Remove.bg",
+    "url": "https://www.remove.bg/",
+    "description": "Serwis online, który automatycznie i precyzyjnie usuwa tło ze zdjęć.",
+    "category": "Narzędzia do Obrazów (OCR)",
+    "category_slug": "pictures"
+  },
+  {
+    "name": "IPTVrun",
+    "url": "https://iptvrun.net/",
+    "description": "Strona udostępniająca darmowe kody i linki do list kanałów IPTV w formacie Xstream.",
+    "category": "IPTV i Radio",
+    "category_slug": "iptv-radio"
+  },
+  {
+    "name": "ChatGPT for Google",
+    "url": "https://github.com/wong2/chat-gpt-google-extension",
+    "description": "Rozszerzenie do przeglądarki, które wyświetla odpowiedzi od ChatGPT obok standardowych wyników wyszukiwania Google.",
+    "category": "Narzędzia AI",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "massgrave.dev",
+    "url": "https://massgrave.dev/index.html",
+    "description": "Otwartoźródłowy aktywator dla systemów Windows i pakietu Office, wykorzystujący metody HWID/KMS38/Online KMS.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "Fake Mail Generator",
+    "url": "https://fakedetail.com/fake-mail-generator",
+    "description": "Generator tymczasowych adresów e-mail z wieloma opcjami dostosowywania.",
+    "category": "Tymczasowe Adresy E-mail",
+    "category_slug": "tymczasowe-skrzynki-e-mail"
+  },
+  {
+    "name": "DeDigger",
+    "url": "https://www.dedigger.com/",
+    "description": "Wyszukiwarka umożliwiająca znajdowanie publicznie dostępnych plików na serwerach Google Drive.",
+    "category": "Wyszukiwarki Plików",
+    "category_slug": "file-search"
+  },
+  {
+    "name": "Invites Shop",
+    "url": "https://invites-shop.com/",
+    "description": "Sklep z zaproszeniami do prywatnych serwisów, takich jak trackery torrent czy serwisy VOD.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "TheFuck",
+    "url": "https://github.com/nvbn/thefuck",
+    "description": "Zabawna, ale użyteczna aplikacja konsolowa, która poprawia poprzednie, błędnie wpisane polecenie.",
+    "category": "Narzędzia Systemowe",
+    "category_slug": "system-tools"
+  },
+  {
+    "name": "ViMusic",
+    "url": "https://github.com/vfsfitvnm/ViMusic",
+    "description": "Alternatywna aplikacja YouTube Music na Androida, z funkcją odtwarzania offline i brakiem reklam.",
+    "category": "Modyfikacje Aplikacji",
+    "category_slug": "app-mods"
+  },
+  {
+    "name": "Arte.tv",
+    "url": "https://www.arte.tv/pl/",
+    "description": "Europejski kanał kulturalny oferujący darmowy dostęp do wysokiej jakości filmów dokumentalnych i programów.",
+    "category": "Inne Media",
+    "category_slug": "other-media"
+  },
+  {
+    "name": "Wyszukiwarka Chomikuj",
+    "url": "http://chomikuj-wyszukiwarka.eu/",
+    "description": "Zaawansowana wyszukiwarka plików w serwisie Chomikuj.pl, z dodatkowymi opcjami filtrowania.",
+    "category": "Wyszukiwarki Plików",
+    "category_slug": "file-search"
+  },
+  {
+    "name": "Kubo (IPFS)",
+    "url": "https://github.com/ipfs/kubo",
+    "description": "Implementacja protokołu IPFS, która pozwala na stworzenie własnego węzła w tej zdecentralizowanej sieci.",
+    "category": "Infrastruktura Sieciowa",
+    "category_slug": "host--port-discovery"
+  },
+  {
+    "name": "NSaneForums",
+    "url": "https://nsaneforums.com/",
+    "description": "Forum z pełnymi, często zmodyfikowanymi wersjami wielu programów.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "My Digital Life Forums",
+    "url": "https://forums.mydigitallife.net/",
+    "description": "Popularne forum z aktywatorami i narzędziami do omijania zabezpieczeń w oprogramowaniu Microsoftu.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "CGPeers (ex CGPersia)",
+    "url": "https://cgpersia.com/",
+    "description": "Jedno z największych forów i trackerów dla grafików, oferujące oprogramowanie i zasoby do grafiki 2D/3D i wideo.",
+    "category": "Scena Warez",
+    "category_slug": "warez-scene"
+  },
+  {
+    "name": "Ishkur's Guide to Electronic Music",
+    "url": "https://music.ishkur.com/",
+    "description": "Interaktywna strona obrazująca ewolucję i powiązania między gatunkami muzyki elektronicznej.",
+    "category": "Inne Media",
+    "category_slug": "other-media"
+  },
+  {
+    "name": "itch.io",
+    "url": "https://itch.io/",
+    "description": "Platforma dystrybucji cyfrowej dla niezależnych twórców gier wideo.",
+    "category": "Gry i Trening",
+    "category_slug": "games"
+  },
+  {
+    "name": "Stream Recorder",
+    "url": "https://chrome.google.com/webstore/detail/stream-recorder-download/iogidnfllpdhagebkblkgbfijkbkjdmm",
+    "description": "Wtyczka do Chrome umożliwiająca nagrywanie i zapisywanie strumieni wideo na żywo (format HLS).",
+    "category": "Narzędzia Przeglądarkowe",
+    "category_slug": "web-browsing"
+  },
+  {
+    "name": "Stream Detector",
+    "url": "https://github.com/stream-detector/stream-detector",
+    "description": "Wtyczka do Firefox, która wykrywa manifesty strumieniowe na stronach i umożliwia ich pobranie.",
+    "category": "Narzędzia Przeglądarkowe",
+    "category_slug": "web-browsing"
+  },
+  {
+    "name": "Streamlink",
+    "url": "https://github.com/streamlink/streamlink",
+    "description": "Narzędzie wiersza poleceń, które przesyła strumienie wideo z różnych serwisów do wybranego odtwarzacza (np. VLC).",
+    "category": "Narzędzia Mediowe",
+    "category_slug": "media-utilities"
+  },
+  {
+    "name": "Library Genesis (IPFS)",
+    "url": "https://libgen-crypto.ipns.dweb.link/",
+    "description": "Zdecentralizowana aplikacja do przeszukiwania bazy danych Library Genesis hostowanej w sieci IPFS.",
+    "category": "Wyszukiwarki Naukowe",
+    "category_slug": "academic--publication-search"
+  },
+  {
+    "name": "Consciousness",
+    "url": "http://consciousness.ct8.pl/cd/set.html",
+    "description": "Strona z wyselekcjonowanymi wydaniami muzyki elektronicznej (beaty) z różnych wytwórni.",
+    "category": "Inne Media",
+    "category_slug": "other-media"
+  },
+  {
+    "name": "Hotmixradio",
+    "url": "https://hotmixradio.com/radios",
+    "description": "Serwis oferujący duży wybór internetowych stacji radiowych, posortowanych według gatunków muzycznych.",
+    "category": "IPTV i Radio",
+    "category_slug": "iptv-radio"
   }
 ]
