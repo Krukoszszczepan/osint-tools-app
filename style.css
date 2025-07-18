@@ -1,4 +1,4 @@
-/* style.css - Wersja 4.0: Nowe funkcje, widoki, ulubione, oceny */
+/* style.css - Wersja 4.1: Dodano smaczki UX/UI */
 :root {
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --background: #111827;
@@ -11,6 +11,8 @@
     --accent-secondary: #2563eb;
     --yellow-star: #facc15;
     --green-new: #10b981;
+    --highlight-bg: rgba(250, 204, 21, 0.5); /* Kolor podświetlenia wyszukiwania */
+    --highlight-text: var(--text-primary);
     --shadow-color: rgba(0, 0, 0, 0.25);
     --line-color: #4b5563;
 }
@@ -22,6 +24,8 @@ body.light-theme {
     --text-primary: #111827;
     --text-secondary: #4b5563;
     --shadow-color: rgba(0, 0, 0, 0.07);
+    --highlight-bg: rgba(250, 204, 21, 0.7);
+    --highlight-text: #1f2937;
     --line-color: #d1d5db;
 }
 
@@ -32,8 +36,14 @@ body {
     background-color: var(--background);
     color: var(--text-primary);
     line-height: 1.5;
-    transition: background-color 0.3s, color 0.3s;
+    /* NOWOŚĆ: Płynne przejście między motywami */
+    transition: background-color 0.4s ease, color 0.4s ease;
     display: flex;
+}
+/* NOWOŚĆ: Dodanie płynnego przejścia dla kluczowych elementów */
+.sidebar, .main-header, .tool-card, .search-box input, .modal-content,
+.view-switcher, .view-btn, .theme-btn, .node-content, .stat-bar-progress {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
 }
 
 /* --- Panel Boczny (Sidebar) --- */
@@ -45,7 +55,7 @@ body {
     position: fixed; top: 0; left: 0;
     display: flex; flex-direction: column;
     padding: 1.5rem;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.4s ease, border-color 0.4s ease; /* Zaktualizowano transition */
     z-index: 1000;
 }
 .sidebar-header {
@@ -64,6 +74,17 @@ body {
     font-size: 0.95rem; font-weight: 500;
     transition: background-color 0.2s, color 0.2s;
     position: relative; color: var(--text-secondary);
+    display: flex; justify-content: space-between; align-items: center;
+}
+/* NOWOŚĆ: Styl dla licznika narzędzi w sidebarze */
+.node-count {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-left: 8px;
+}
+.node-content.is-active .node-count {
+    color: rgba(255, 255, 255, 0.7);
 }
 .node-content.is-expandable { font-weight: 600; color: var(--text-primary); }
 .node-content:hover { background-color: var(--surface-2); color: var(--text-primary); }
@@ -75,8 +96,14 @@ body {
 .node-children { padding-left: 16px; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
 .node-children > div { overflow: hidden; }
 .is-expanded > .node-children { grid-template-rows: 1fr; }
-/* Linie łączące (bez zmian) */
-.mindmap-node::before, .mindmap-node::after { content: ''; position: absolute; left: 12px; background-color: var(--line-color); }
+
+/* Linie łączące */
+.mindmap-node::before, .mindmap-node::after {
+    content: ''; position: absolute; left: 12px;
+    /* NOWOŚĆ: Kolor linii z akcentem kategorii */
+    background-color: var(--node-accent-color, var(--line-color));
+    transition: background-color 0.4s ease;
+}
 .mindmap-node::before { top: -12px; width: 1px; height: calc(100% + 4px); }
 .mindmap-node::after { top: 18px; width: 12px; height: 1px; }
 .mindmap-node:last-child::before { height: 30px; }
@@ -90,10 +117,9 @@ body {
     padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 500;
 }
 .header-container { display: flex; align-items: center; gap: 1rem; }
-/* Search-box, theme-btn, mobile-menu-btn (bez zmian) */
 .search-box { flex-grow: 1; position: relative; }
 .search-box i { position: absolute; top: 50%; transform: translateY(-50%); left: 1rem; color: var(--text-secondary); }
-.search-box input { background-color: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem 0.75rem 2.75rem; width: 100%; color: var(--text-primary); font-family: var(--font-family); font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
+.search-box input { background-color: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem 0.75rem 2.75rem; width: 100%; color: var(--text-primary); font-family: var(--font-family); font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s, background-color 0.4s ease, color 0.4s ease; }
 .search-box input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4); }
 .theme-btn { background-color: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; justify-content: center; align-items: center; transition: all 0.3s; flex-shrink: 0; }
 .theme-btn:hover { color: var(--text-primary); border-color: var(--accent-primary); }
@@ -119,7 +145,7 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .tool-card {
     background-color: var(--surface-1); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.4s ease, border-color 0.4s ease;
     box-shadow: 0 4px 6px -1px var(--shadow-color); position: relative;
 }
 #tools-container.tools-list .tool-card { flex-direction: row; align-items: center; gap: 1.5rem; }
@@ -131,12 +157,68 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .tool-card-header h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--text-primary); }
 .tool-category { font-size: 0.8rem; font-weight: 500; color: var(--card-accent-color, var(--accent-primary)); margin-bottom: 1rem; }
 .tool-description { color: var(--text-secondary); margin-bottom: 1.5rem; }
+/* NOWOŚĆ: Styl dla podświetlonej frazy */
+.tool-description mark, h3 mark {
+    background-color: var(--highlight-bg);
+    color: var(--highlight-text);
+    padding: 0 2px;
+    border-radius: 3px;
+}
 
 /* Nowe elementy kart */
 .tool-card-actions { display: flex; justify-content: space-between; align-items: center; }
 #tools-container.tools-list .tool-card-actions { flex-direction: column; align-items: flex-end; }
+
+/* NOWOŚĆ: Dodano grupę przycisków akcji */
+.tool-actions-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
 .tool-link { background-color: var(--accent-primary); color: white; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 500; transition: background-color 0.2s; white-space: nowrap; }
 .tool-link:hover { background-color: var(--accent-secondary); }
+
+/* NOWOŚĆ: Style dla przycisku kopiowania */
+.copy-btn {
+    background-color: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.6rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative; /* Potrzebne dla dymka */
+}
+.copy-btn:hover {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+/* NOWOŚĆ: Dymek "Skopiowano!" */
+.copy-btn[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--surface-1);
+    color: var(--text-primary);
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    box-shadow: 0 2px 5px var(--shadow-color);
+}
+.copy-btn.copied[data-tooltip]::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+
 .new-badge {
     position: absolute; top: 1rem; right: 1rem;
     background-color: var(--green-new); color: white;
@@ -146,35 +228,29 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .favorite-btn { background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer; transition: all .2s; }
 .favorite-btn:hover { color: var(--yellow-star); }
 .favorite-btn.is-favorite { color: var(--yellow-star); }
+
+/* NOWOŚĆ: Animacja pulsowania dla ulubionych */
+@keyframes pulse-star {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+.favorite-btn.pulsing .fa-star {
+    animation: pulse-star 0.5s ease-in-out;
+}
+
 .rating-stars { display: flex; gap: 2px; }
 .rating-stars .fa-star { color: var(--text-secondary); cursor: pointer; transition: color 0.2s; }
 .rating-stars:hover .fa-star { color: var(--yellow-star); }
 .rating-stars .fa-star:hover ~ .fa-star { color: var(--text-secondary); }
 .rating-stars .fa-star.is-rated { color: var(--yellow-star); }
 
-
-/* --- Okno Modalne --- */
-.modal-container {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(5px);
-    display: flex; justify-content: center; align-items: center;
-    z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-}
+/* Pozostałe style bez zmian */
+.modal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
 .modal-container.is-open { opacity: 1; pointer-events: auto; }
-.modal-content {
-    background: var(--surface-1); border-radius: 12px; padding: 2rem;
-    width: 90%; max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative;
-    transform: scale(0.95); transition: transform 0.3s ease;
-}
+.modal-content { background: var(--surface-1); border-radius: 12px; padding: 2rem; width: 90%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; transform: scale(0.95); transition: transform 0.3s ease; }
 .modal-container.is-open .modal-content { transform: scale(1); }
-.modal-close-btn {
-    position: absolute; top: 1rem; right: 1rem;
-    background: none; border: none; font-size: 1.5rem;
-    color: var(--text-secondary); cursor: pointer;
-}
-
-/* --- Sekcje Specjalne (Baza Wiedzy, Statystyki) --- */
+.modal-close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; color: var(--text-secondary); cursor: pointer; }
 .placeholder-section { padding: 2rem; text-align: center; color: var(--text-secondary); }
 .placeholder-section .fas { font-size: 4rem; margin-bottom: 1rem; color: var(--border); }
 .stats-container { display: flex; flex-direction: column; gap: 2rem; }
@@ -183,17 +259,12 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .stat-bar-progress { flex-grow: 1; background: var(--surface-2); border-radius: 4px; height: 20px; }
 .stat-bar-fill { height: 100%; background: var(--accent-primary); border-radius: 4px; transition: width 0.5s ease-out; }
 
-/* --- Responsywność --- */
 @media (max-width: 1024px) {
     body { display: block; }
     .sidebar { transform: translateX(-100%); box-shadow: 5px 0 15px rgba(0,0,0,0.2); }
     .sidebar.is-open { transform: translateX(0); }
     .main-content { margin-left: 0; width: 100%; }
-    .mobile-menu-btn {
-        display: flex; align-items: center; justify-content: center;
-        background: none; border: none; color: var(--text-primary);
-        font-size: 1.2rem; width: 44px; height: 44px; cursor: pointer;
-    }
+    .mobile-menu-btn { display: flex; align-items: center; justify-content: center; background: none; border: none; color: var(--text-primary); font-size: 1.2rem; width: 44px; height: 44px; cursor: pointer; }
 }
 @media (max-width: 640px) {
     .content-area { padding: 1.5rem; }
