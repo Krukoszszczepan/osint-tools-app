@@ -1,4 +1,4 @@
-/* style.css - Wersja 4.1: Ulepszone style dla hierarchicznej mapy myśli */
+/* style.css - Wersja 5.0: Finalna wersja z dopracowanym UI, scrollbarami i dostępnością */
 :root {
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --background: #111827;
@@ -14,6 +14,8 @@
     --red-error: #ef4444;
     --shadow-color: rgba(0, 0, 0, 0.25);
     --line-color: #4b5563;
+    --scrollbar-thumb: var(--surface-2);
+    --scrollbar-track: var(--surface-1);
 }
 body.light-theme {
     --background: #f3f4f6;
@@ -24,10 +26,13 @@ body.light-theme {
     --text-secondary: #4b5563;
     --shadow-color: rgba(0, 0, 0, 0.07);
     --line-color: #d1d5db;
+    --scrollbar-thumb: #c7cdd6;
+    --scrollbar-track: var(--background);
 }
 
 /* --- Podstawowe style i reset --- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
     font-family: var(--font-family);
     background-color: var(--background);
@@ -42,6 +47,12 @@ mark {
     padding: 0 2px;
     border-radius: 3px;
 }
+
+/* --- Custom Scrollbar --- */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
 
 /* --- Panel Boczny (Sidebar) --- */
 .sidebar {
@@ -68,7 +79,6 @@ mark {
 
 /* --- ULEPSZONA MAPA MYŚLI --- */
 .mindmap-root { overflow-y: auto; padding-right: 1rem; margin-right: -1rem; flex-grow: 1; }
-
 /* 1. Super-grupy (Najwyższy poziom) */
 .super-group-node { margin-bottom: 1rem; }
 .super-group-header {
@@ -84,13 +94,11 @@ mark {
 .super-group-children { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
 .super-group-children > div { overflow: hidden; padding-left: 10px; position: relative; }
 .super-group-node.is-expanded > .super-group-children { grid-template-rows: 1fr; }
-
 /* 2. Linie dla Super-grup */
 .super-group-children > div::before {
     content: ''; position: absolute; left: 16px; top: 0;
     width: 1px; height: 100%; background-color: var(--line-color);
 }
-
 /* 3. Węzły wewnątrz Super-grup (Kategorie główne i podkategorie) */
 .mindmap-node { position: relative; padding-left: 28px; margin-bottom: 2px; }
 .node-content {
@@ -108,20 +116,18 @@ mark {
 .node-content i { margin-right: 8px; font-size: 0.8rem; width: 1.1em; text-align: center; }
 .node-content .fa-angle-right { transition: transform 0.3s ease; }
 .is-expanded > .node-content .fa-angle-right { transform: rotate(90deg); }
-
 /* 4. Linie dla zwykłych węzłów */
 .mindmap-node::before, .mindmap-node::after { content: ''; position: absolute; left: 16px; background-color: var(--line-color); }
 .mindmap-node::before { top: 0; bottom: 0; width: 1px; }
 .mindmap-node::after { top: 17px; width: 12px; height: 1px; }
 .mindmap-node:last-child::before { height: 18px; }
-
 /* 5. Zagnieżdżone dzieci (podkategorie) */
 .node-children { padding-left: 10px; display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.4s ease-out; }
 .node-children > div { overflow: hidden; }
 .is-expanded > .node-children { grid-template-rows: 1fr; }
 
 /* --- Główna zawartość --- */
-.main-content { margin-left: 320px; width: calc(100% - 320px); display: flex; flex-direction: column; }
+.main-content { margin-left: 320px; width: calc(100% - 320px); display: flex; flex-direction: column; min-height: 100vh; }
 .main-header {
     background-color: var(--surface-1); border-bottom: 1px solid var(--border);
     padding: 1rem 1.5rem; position: sticky; top: 0; z-index: 500;
@@ -130,7 +136,7 @@ mark {
 .search-box { flex-grow: 1; position: relative; }
 .search-box i { position: absolute; top: 50%; transform: translateY(-50%); left: 1rem; color: var(--text-secondary); }
 .search-box input { background-color: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem 0.75rem 2.75rem; width: 100%; color: var(--text-primary); font-family: var(--font-family); font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
-.search-box input:focus { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 40%, transparent); }
+.search-box input:focus-visible { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 40%, transparent); }
 .theme-btn { background-color: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; justify-content: center; align-items: center; transition: all 0.3s; flex-shrink: 0; }
 .theme-btn:hover { color: var(--text-primary); border-color: var(--accent-primary); }
 .theme-btn .fa-sun { display: none; }
@@ -147,6 +153,20 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .view-switcher { display: flex; background-color: var(--surface-2); border-radius: 8px; padding: 4px; }
 .view-btn { background: none; border: none; color: var(--text-secondary); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer; transition: all .2s; }
 .view-btn.active { background-color: var(--surface-1); color: var(--text-primary); box-shadow: 0 1px 3px var(--shadow-color); }
+.view-btn:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
+
+/* --- Wskaźnik ładowania --- */
+.loading-indicator {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 4rem; color: var(--text-secondary);
+}
+.spinner {
+    width: 48px; height: 48px; border: 5px solid var(--surface-2);
+    border-bottom-color: var(--accent-primary); border-radius: 50%;
+    display: inline-block; box-sizing: border-box;
+    animation: rotation 1s linear infinite; margin-bottom: 1rem;
+}
+@keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* --- Widoki narzędzi --- */
 #tools-container.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
@@ -156,7 +176,7 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .tool-card {
     background-color: var(--surface-1); border: 1px solid var(--border);
     border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 6px -1px var(--shadow-color); position: relative;
     overflow: hidden; /* For new badge */
 }
@@ -173,8 +193,6 @@ body.light-theme .theme-btn .fa-moon { display: none; }
     border-radius: 12px; background-color: color-mix(in srgb, var(--card-accent-color, var(--accent-primary)) 15%, transparent);
 }
 .tool-description { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; }
-
-/* Nowe elementy kart */
 .tool-card-actions { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); }
 #tools-container.tools-list .tool-card-actions { border-top: none; padding-top: 0; }
 .tool-actions-group { display: flex; align-items: center; gap: 0.5rem; }
@@ -184,7 +202,6 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .copy-btn { background-color: var(--surface-2); color: var(--text-secondary); border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
 .copy-btn:hover { color: var(--text-primary); border-color: var(--accent-primary); }
 .copy-btn.copied { background-color: var(--green-new); color: white; border-color: var(--green-new); }
-
 .new-badge {
     position: absolute; top: 1rem; right: 1rem;
     background-color: var(--green-new); color: white;
@@ -196,13 +213,21 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .favorite-btn.is-favorite { color: var(--yellow-star); }
 .favorite-btn.pulsing { animation: pulse 0.5s ease-out; }
 @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
-
 .rating-stars { display: flex; gap: 2px; }
 .rating-stars .fa-star { color: var(--text-secondary); cursor: pointer; transition: color 0.2s; }
 .rating-stars:hover .fa-star { color: var(--yellow-star); }
 .rating-stars .fa-star:hover ~ .fa-star { color: var(--text-secondary); }
 .rating-stars .fa-star.is-rated { color: var(--yellow-star); }
 
+/* --- Stopka --- */
+.main-footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: var(--surface-1);
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
 
 /* --- Okno Modalne --- */
 .modal-container {
@@ -254,4 +279,60 @@ body.light-theme .theme-btn .fa-moon { display: none; }
     .content-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
     .header-controls { width: 100%; justify-content: space-between; }
     #tools-container.tools-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Banner Ciasteczek --- */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--surface-1);
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    z-index: 9999;
+    box-shadow: 0 -4px 15px var(--shadow-color);
+    transform: translateY(0);
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    opacity: 1;
+}
+.cookie-banner.hidden {
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+.cookie-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+.cookie-content p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+}
+.cookie-accept-button {
+    background-color: var(--accent-primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: background-color 0.2s;
+}
+.cookie-accept-button:hover {
+    background-color: var(--accent-secondary);
+}
+@media (max-width: 768px) {
+    .cookie-content {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 1rem;
+    }
 }
