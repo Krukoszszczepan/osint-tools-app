@@ -1,4 +1,4 @@
-/* style.css - Wersja 5.0: Finalna wersja z dopracowanym UI, scrollbarami i dostępnością */
+/* style.css - Wersja 6.0: Finalna wersja z dopracowanym UI, animacjami, scrollbarami i dostępnością */
 :root {
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --background: #111827;
@@ -48,10 +48,24 @@ mark {
     border-radius: 3px;
 }
 
+/* --- Ulepszona Dostępność (Focus Visible) --- */
+a, button, input {
+    outline: none;
+}
+a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--accent-primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-primary) 30%, transparent);
+}
+.node-content:focus-visible {
+    outline: 2px solid var(--accent-secondary);
+    outline-offset: -2px;
+}
+
 /* --- Custom Scrollbar --- */
-::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--scrollbar-track); }
-::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 5px; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 5px; border: 2px solid var(--scrollbar-track); }
 ::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
 
 /* --- Panel Boczny (Sidebar) --- */
@@ -136,7 +150,6 @@ mark {
 .search-box { flex-grow: 1; position: relative; }
 .search-box i { position: absolute; top: 50%; transform: translateY(-50%); left: 1rem; color: var(--text-secondary); }
 .search-box input { background-color: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem 0.75rem 2.75rem; width: 100%; color: var(--text-primary); font-family: var(--font-family); font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
-.search-box input:focus-visible { outline: none; border-color: var(--accent-primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 40%, transparent); }
 .theme-btn { background-color: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; justify-content: center; align-items: center; transition: all 0.3s; flex-shrink: 0; }
 .theme-btn:hover { color: var(--text-primary); border-color: var(--accent-primary); }
 .theme-btn .fa-sun { display: none; }
@@ -153,7 +166,6 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 .view-switcher { display: flex; background-color: var(--surface-2); border-radius: 8px; padding: 4px; }
 .view-btn { background: none; border: none; color: var(--text-secondary); padding: 0.3rem 0.6rem; border-radius: 6px; cursor: pointer; transition: all .2s; }
 .view-btn.active { background-color: var(--surface-1); color: var(--text-primary); box-shadow: 0 1px 3px var(--shadow-color); }
-.view-btn:focus-visible { outline: 2px solid var(--accent-primary); outline-offset: 2px; }
 
 /* --- Wskaźnik ładowania --- */
 .loading-indicator {
@@ -169,9 +181,22 @@ body.light-theme .theme-btn .fa-moon { display: none; }
 @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* --- Widoki narzędzi --- */
+.tools-container {
+    opacity: 1;
+    transition: opacity 0.15s ease-in-out;
+}
+.tools-container.fade-out {
+    opacity: 0;
+}
 #tools-container.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
 #tools-container.tools-list { display: flex; flex-direction: column; gap: 1rem; }
 .no-results { text-align: center; color: var(--text-secondary); font-size: 1.2rem; padding: 4rem 0; }
+
+/* Animacja pojawiania się kart */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 
 .tool-card {
     background-color: var(--surface-1); border: 1px solid var(--border);
@@ -179,6 +204,9 @@ body.light-theme .theme-btn .fa-moon { display: none; }
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     box-shadow: 0 4px 6px -1px var(--shadow-color); position: relative;
     overflow: hidden; /* For new badge */
+    opacity: 0; /* Start invisible, animation will make it visible */
+    animation: fadeIn 0.4s ease-out forwards;
+    animation-delay: calc(var(--card-index) * 20ms); /* Kaskadowe pojawianie się */
 }
 #tools-container.tools-list .tool-card { flex-direction: row; align-items: center; gap: 1.5rem; }
 
@@ -245,7 +273,7 @@ body.light-theme .theme-btn .fa-moon { display: none; }
     transform: scale(0.95); transition: transform 0.3s ease;
 }
 .modal-container.is-open .modal-content { transform: scale(1); }
-#modal-body .tool-card { border: none; box-shadow: none; }
+#modal-body .tool-card { border: none; box-shadow: none; animation: none; opacity: 1; }
 .modal-close-btn {
     position: absolute; top: 1rem; right: 1rem;
     background: none; border: none; font-size: 1.5rem;
@@ -292,14 +320,11 @@ body.light-theme .theme-btn .fa-moon { display: none; }
     padding: 1rem 1.5rem;
     z-index: 9999;
     box-shadow: 0 -4px 15px var(--shadow-color);
-    transform: translateY(0);
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    opacity: 1;
+    transform: translateY(100%); /* Start hidden */
+    transition: transform 0.5s ease-in-out;
 }
-.cookie-banner.hidden {
-    transform: translateY(100%);
-    opacity: 0;
-    pointer-events: none;
+.cookie-banner.visible {
+    transform: translateY(0);
 }
 .cookie-content {
     max-width: 1200px;
