@@ -1,7 +1,7 @@
 /**
  * @file Skrypt do obsługi interaktywnej bazy narzędzi OSINT.
- * @version 6.0.0
- * @description Wersja premium z płynnymi przejściami, animacjami, debouncingiem wyszukiwania,
+ * @version 6.1.0
+ * @description Wersja premium z płynnymi przejściami, kaskadowymi animacjami kart, debouncingiem wyszukiwania,
  *              kompletną i zoptymalizowaną logiką kategorii oraz ulepszoną wydajnością.
  */
 document.addEventListener('DOMContentLoaded', function () {
@@ -73,9 +73,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (getViewMode() === 'list') {
-            dom.toolsContainer.className = 'tools-list';
+            dom.toolsContainer.className = 'tools-container tools-list';
             dom.viewGridBtn.classList.remove('active');
             dom.viewListBtn.classList.add('active');
+        } else {
+             dom.toolsContainer.className = 'tools-container tools-grid';
         }
 
         dom.viewGridBtn.addEventListener('click', () => switchView('grid'));
@@ -100,7 +102,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'polish_sources': { name: '🇵🇱 POLSKIE ŹRÓDŁA', icon: 'fas fa-flag' }
     };
     
-    // Uproszczona mapa kategorii - klucz to 'category_slug'
     const categoryMappings = {
         'username-search-engines': { main: 'Wyszukiwanie Nazw Użytkownika', super: 'osint_domains' },
         'email-search': { main: 'Email Intelligence', super: 'osint_domains' },
@@ -162,7 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'dnssec': { main: 'Infrastruktura Sieciowa', super: 'technical_analysis' },
         'cloud-resources': { main: 'Infrastruktura Sieciowa', super: 'technical_analysis' },
         'network-analysis-tools': { main: 'Analiza Ruchu Sieciowego', super: 'technical_analysis' },
-        'ip-loggers': { main: 'Loggery IP', super: 'technical_analysis' },
         'reputation': { main: 'Reputacja i Analiza Zagrożeń', super: 'technical_analysis' },
         'mail-blacklists': { main: 'Reputacja i Analiza Zagrożeń', super: 'technical_analysis' },
         'domain-blacklists': { main: 'Reputacja i Analiza Zagrożeń', super: 'technical_analysis' },
@@ -322,7 +322,6 @@ document.addEventListener('DOMContentLoaded', function () {
         'neighbor-domains': { main: 'Sąsiednie Domeny', super: 'technical_analysis' },
         'protected-by-cloud-services': { main: 'Usługi Chmurowe (Ochrona)', super: 'technical_analysis' },
         'wireless-network-info': { main: 'Sieci Bezprzewodowe', super: 'technical_analysis' },
-        'ip-loggers': { main: 'Loggery IP', super: 'technical_analysis' },
         'wyszukiwanie': { main: 'Wyszukiwarki Mediów', super: 'osint_domains' },
         'analiza': { main: 'Analiza Wideo', super: 'osint_domains' },
         'wideo': { main: 'Wideo', super: 'osint_domains' },
@@ -346,7 +345,14 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // --- FUNKCJE RENDERUJĄCE ---
 
-    function generateToolCard(tool, searchTerm = '') {
+    /**
+     * Tworzy kartę narzędzia.
+     * @param {object} tool - Obiekt narzędzia.
+     * @param {string} [searchTerm=''] - Opcjonalna fraza do podświetlenia.
+     * @param {number} [index=0] - Indeks karty dla animacji.
+     * @returns {string} Kod HTML karty narzędzia.
+     */
+    function generateToolCard(tool, searchTerm = '', index = 0) {
         const favorites = getFavorites();
         const ratings = getRatings();
         const color = categoryColors[tool.category_slug] || '#9ca3af';
@@ -358,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const highlightedDesc = highlightText(tool.description, searchTerm);
 
         return `
-            <div class="tool-card" data-tool-name="${tool.name}" data-tool-url="${tool.url}">
+            <div class="tool-card" data-tool-name="${tool.name}" data-tool-url="${tool.url}" style="--card-index: ${index};">
                 ${isNew ? '<span class="new-badge">Nowe!</span>' : ''}
                 <div class="tool-card-main">
                     <div class="tool-card-header">
@@ -554,12 +560,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
                 
                 const filteredTools = toolsToDisplay.filter(tool =>
-                    searchTerm === '' || tool.name.toLowerCase().includes(searchTerm) || tool.description.toLowerCase().includes(searchTerm)
+                    searchTerm === '' || tool.name.toLowerCase().includes(searchTerm) || (tool.description && tool.description.toLowerCase().includes(searchTerm))
                 );
 
                 dom.toolCount.textContent = `${filteredTools.length} narzędzi`;
                 if (filteredTools.length > 0) {
-                    dom.toolsContainer.innerHTML = filteredTools.map(tool => generateToolCard(tool, searchTerm)).join('');
+                    dom.toolsContainer.innerHTML = filteredTools.map((tool, index) => generateToolCard(tool, searchTerm, index)).join('');
                 } else {
                     dom.toolsContainer.innerHTML = '<p class="no-results">😢 Brak wyników dla podanych kryteriów.</p>';
                 }
@@ -656,13 +662,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const acceptBtn = document.getElementById('cookie-accept-btn');
         if (!cookieBanner || !acceptBtn) return;
         if (ls.get('cookiesAccepted', false)) {
-            cookieBanner.classList.add('hidden');
-            return;
+            cookieBanner.style.display = 'none';
+        } else {
+            setTimeout(() => cookieBanner.classList.add('visible'), 1500);
         }
-        setTimeout(() => cookieBanner.classList.remove('hidden'), 1500);
         acceptBtn.addEventListener('click', () => {
             ls.set('cookiesAccepted', true);
-            cookieBanner.classList.add('hidden');
+            cookieBanner.classList.remove('visible');
         });
     })();
 
