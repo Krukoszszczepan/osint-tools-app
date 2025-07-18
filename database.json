@@ -11541,5 +11541,243 @@
     "description": "Platforma FlowGPT symulująca działanie modeli AI, w tym kontrowersyjnego WormGPT. Umożliwia testowanie zapytań w różnych scenariuszach w celach badawczych.",
     "category": "AI Tools",
     "category_slug": "ai-tools"
+  },
+  {
+    "name": "in4.bz",
+    "url": "https://in4.bz/",
+    "description": "Wielotematyczne, rosyjskojęzyczne forum. Może stanowić cenne źródło informacji i dyskusji w dochodzeniach OSINT dotyczących Europy Wschodniej.",
+    "category": "Forum Search Engines",
+    "category_slug": "forum-search-engines"
+  },
+  {
+    "name": "Patched.to",
+    "url": "https://patched.to/",
+    "description": "Forum poświęcone crackingowi oprogramowania i inżynierii wstecznej. Cenne źródło do monitorowania trendów i narzędzi w społecznościach grey-hat.",
+    "category": "Threat Intelligence",
+    "category_slug": "threat-intelligence"
+  },
+  {
+    "name": "CyberBreach.io",
+    "url": "https://cyberbreach.io/",
+    "description": "Forum o tematyce cyberbezpieczeństwa i crackingu, na którym można znaleźć dyskusje na temat podatności, wycieków danych i narzędzi.",
+    "category": "Threat Intelligence",
+    "category_slug": "threat-intelligence"
+  },
+  {
+    "name": "LeakZone",
+    "url": "https://leakzone.net/",
+    "description": "Forum skupione na wyciekach danych, udostępnianiu baz i narzędziach hakerskich. Istotne miejsce do monitorowania najnowszych incydentów.",
+    "category": "Threat Intelligence",
+    "category_slug": "threat-intelligence"
+  },
+  {
+    "name": "Substital",
+    "url": "https://substital.com/",
+    "description": "Rozszerzenie do przeglądarki, które automatycznie znajduje i dodaje napisy do filmów i seriali online. Przydatne w analizie materiałów wideo w obcych językach.",
+    "category": "Analyze / Record",
+    "category_slug": "analyze--record"
+  },
+  {
+    "name": "NapiProjekt",
+    "url": "https://www.napiprojekt.pl/",
+    "description": "Popularny polski program i serwis do automatycznego pobierania i dopasowywania napisów do filmów, kluczowy w analizie materiałów wideo.",
+    "category": "Analyze / Record",
+    "category_slug": "analyze--record"
+  },
+  {
+    "name": "OpenSubtitles",
+    "url": "https://www.opensubtitles.org/pl",
+    "description": "Jedna z największych na świecie baz z napisami do filmów i seriali w wielu językach, niezbędna do analizy treści multimedialnych.",
+    "category": "Analyze / Record",
+    "category_slug": "analyze--record"
+  },
+  {
+    "name": "PreDB.me",
+    "url": "https://predb.me/",
+    "description": "Baza danych sceny warezowej, która w czasie rzeczywistym indeksuje nowe wydania (release'y) filmów, gier i oprogramowania. Kluczowe narzędzie do śledzenia aktywności grup pirackich.",
+    "category": "Threat Intelligence",
+    "category_slug": "threat-intelligence"
+  },
+  {
+    "name": "Upflix",
+    "url": "https://upflix.pl/",
+    "description": "Wyszukiwarka pozwalająca sprawdzić, na której legalnej platformie streamingowej (Netflix, HBO, itp.) dostępny jest dany film lub serial.",
+    "category": "Other Media",
+    "category_slug": "other-media"
+  },
+  {
+    "name": "QNapi",
+    "url": "https://qnapi.github.io/",
+    "description": "Otwartoźródłowy program do pobierania i dopasowywania napisów do filmów, wspierający wiele serwisów z napisami.",
+    "category": "Analyze / Record",
+    "category_slug": "analyze--record"
+  },
+  {
+    "name": "OpenTrackers.org",
+    "url": "https://opentrackers.org/",
+    "description": "Strona informująca o otwartych rejestracjach na prywatnych trackerach torrent. Przydatna do monitorowania sceny torrentowej.",
+    "category": "Threat Intelligence",
+    "category_slug": "threat-intelligence"
+  },
+  {
+    "name": "Daty Premier",
+    "url": "https://datapremiery.pl/",
+    "description": "Serwis agregujący daty premier filmów, seriali, gier, książek i albumów muzycznych w Polsce.",
+    "category": "Other Media",
+    "category_slug": "other-media"
+  },
+  {
+    "name": "Wolne Lektury",
+    "url": "https://wolnelektury.pl/",
+    "description": "Biblioteka cyfrowa zawierająca lektury szkolne i klasykę literatury, które znajdują się w domenie publicznej. Legalne źródło tekstów do analizy.",
+    "category": "Academic / Publication Search",
+    "category_slug": "academic--publication-search"
+  },
+  {
+    "name": "PDFDrive",
+    "url": "https://www.pdfdrive.com/",
+    "description": "Obszerna wyszukiwarka darmowych e-booków w formacie PDF, obejmująca szeroki zakres tematów.",
+    "category": "Academic / Publication Search",
+    "category_slug": "academic--publication-search"
+  },
+  {
+    "name": "TeraBox",
+    "url": "https://www.terabox.com/",
+    "description": "Usługa przechowywania w chmurze oferująca 1 TB darmowej przestrzeni, często wykorzystywana do udostępniania dużych zbiorów danych.",
+    "category": "Przechowywanie",
+    "category_slug": "przechowywanie"
+  },
+  {
+    "name": "File.pizza",
+    "url": "https://file.pizza/",
+    "description": "Narzędzie do bezpośredniego transferu plików P2P (peer-to-peer) w przeglądarce, bez pośrednictwa serwera. Zapewnia wysoki poziom prywatności.",
+    "category": "Tools",
+    "category_slug": "tools"
+  },
+  {
+    "name": "ToffeeShare",
+    "url": "https://toffeeshare.com/",
+    "description": "Umożliwia udostępnianie plików o dowolnym rozmiarze bezpośrednio z jednego urządzenia na drugie (P2P), bez zapisywania ich na serwerze.",
+    "category": "Tools",
+    "category_slug": "tools"
+  },
+  {
+    "name": "XTEA",
+    "url": "https://xtea.io/ts_en.html",
+    "description": "Zaawansowana wyszukiwarka treści na platformie Telegram, umożliwiająca przeszukiwanie kanałów i grup.",
+    "category": "Search Tools",
+    "category_slug": "search-tools"
+  },
+  {
+    "name": "Lyzem",
+    "url": "https://lyzem.com/",
+    "description": "Wyszukiwarka dedykowana do przeszukiwania publicznych kanałów, grup i botów na Telegramie.",
+    "category": "Search Tools",
+    "category_slug": "search-tools"
+  },
+  {
+    "name": "TGStat",
+    "url": "https://tgstat.com/en/search",
+    "description": "Platforma do analizy i statystyk kanałów na Telegramie. Umożliwia wyszukiwanie, śledzenie wzrostu i zaangażowania.",
+    "category": "Analytics",
+    "category_slug": "analytics"
+  },
+  {
+    "name": "Aixploria",
+    "url": "https://www.aixploria.com/en/free-ai/",
+    "description": "Ogromny, aktualizowany katalog darmowych i płatnych narzędzi AI, posegregowanych według kategorii. Ułatwia odkrywanie nowych aplikacji.",
+    "category": "AI Directories",
+    "category_slug": "ai-directories"
+  },
+  {
+    "name": "FutureTools",
+    "url": "https://www.futuretools.io/",
+    "description": "Kolejna duża biblioteka narzędzi AI, regularnie aktualizowana i dobrze skategoryzowana, prowadzona przez Matta Wolfe'a.",
+    "category": "AI Directories",
+    "category_slug": "ai-directories"
+  },
+  {
+    "name": "Vectorizer.ai",
+    "url": "https://pl.vectorizer.ai/",
+    "description": "Narzędzie AI, które precyzyjnie konwertuje obrazy rastrowe (JPG, PNG) na skalowalną grafikę wektorową (SVG).",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "SaveTheVideo",
+    "url": "https://www.savethevideo.com/",
+    "description": "Wszechstronne narzędzie do pobierania materiałów wideo z wielu popularnych platform, takich jak Twitter, Vimeo, Reddit i TikTok.",
+    "category": "Analyze / Record",
+    "category_slug": "analyze--record"
+  },
+  {
+    "name": "FetchFile",
+    "url": "https://fetchfile.net/pl",
+    "description": "Pobieracz online obsługujący szeroką gamę serwisów, w tym YouTube, VK, SoundCloud, Google Drive i wiele innych.",
+    "category": "Analyze / Record",
+    "category_slug": "analyze--record"
+  },
+  {
+    "name": "Polish Ads Filters",
+    "url": "https://majkiit.github.io/polish-ads-filter/",
+    "description": "Zestaw polskich filtrów do blokerów reklam (uBlock, AdGuard), które skutecznie blokują reklamy i elementy śledzące na polskich stronach.",
+    "category": "Anonymous Browsing",
+    "category_slug": "anonymous-browsing"
+  },
+  {
+    "name": "Pepper.pl",
+    "url": "https://www.pepper.pl/",
+    "description": "Społecznościowy serwis agregujący promocje i okazje zakupowe. Może służyć do analizy trendów konsumenckich.",
+    "category": "Additional Resources",
+    "category_slug": "additional-resources"
+  },
+  {
+    "name": "Bitchute",
+    "url": "https://www.bitchute.com/",
+    "description": "Alternatywna platforma wideo, często goszcząca treści, które zostały usunięte z YouTube. Ważne źródło w analizie dezinformacji i niszowych społeczności.",
+    "category": "Videos",
+    "category_slug": "videos"
+  },
+  {
+    "name": "Rumble",
+    "url": "https://rumble.com/",
+    "description": "Platforma wideo popularna wśród twórców poszukujących alternatywy dla YouTube, często o profilu konserwatywnym lub politycznym.",
+    "category": "Videos",
+    "category_slug": "videos"
+  },
+  {
+    "name": "Odysee",
+    "url": "https://odysee.com/",
+    "description": "Zdecentralizowana platforma wideo oparta na blockchainie LBRY, promująca wolność słowa. Źródło unikalnych treści.",
+    "category": "Videos",
+    "category_slug": "videos"
+  },
+  {
+    "name": "Find YouTube Video",
+    "url": "https://findyoutubevideo.thetechrobo.ca/",
+    "description": "Wyszukiwarka, która przeszukuje różne archiwa internetowe w poszukiwaniu usuniętych filmów z YouTube.",
+    "category": "Web",
+    "category_slug": "web"
+  },
+  {
+    "name": "Anonyig",
+    "url": "https://anonyig.com/en/",
+    "description": "Narzędzie do anonimowego przeglądania publicznych profili i relacji (Stories) na Instagramie bez konieczności logowania.",
+    "category": "Anonymous Browsing",
+    "category_slug": "anonymous-browsing"
+  },
+  {
+    "name": "OnWorks",
+    "url": "https://www.onworks.net/",
+    "description": "Platforma pozwalająca na uruchamianie różnych systemów operacyjnych (np. Ubuntu, Windows Online) bezpośrednio w przeglądarce.",
+    "category": "Virtual Machines",
+    "category_slug": "virtual-machines"
+  },
+  {
+    "name": "fmhy.net",
+    "url": "https://fmhy.net",
+    "description": "Obszerna, stale aktualizowana lista linków i narzędzi (tzw. 'wiki'), obejmująca szeroki zakres tematów, od oprogramowania po zasoby multimedialne.",
+    "category": "Additional Resources",
+    "category_slug": "additional-resources"
   }
 ]
