@@ -11373,5 +11373,173 @@
     "description": "Newsletter OSINT autorstwa Alicji Pawłowskiej, dostarczający cotygodniowe aktualności, narzędzia i techniki z zakresu analizy otwartych źródeł informacji.",
     "category": "Newslettery",
     "category_slug": "newslettery"
+  },
+  {
+    "name": "ElevenLabs",
+    "url": "https://elevenlabs.io/",
+    "description": "Zaawansowane narzędzie do syntezy mowy i generowania głosu AI, umożliwiające tworzenie realistycznych narracji i dubbingu.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Claude AI",
+    "url": "https://claude.ai/",
+    "description": "Konkurencyjny dla ChatGPT model językowy od Anthropic, zdolny do analizy i generowania tekstu, przydatny w przetwarzaniu dużych ilości danych.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Perplexity AI",
+    "url": "https://www.perplexity.ai/",
+    "description": "Wyszukiwarka konwersacyjna, która dostarcza odpowiedzi na pytania wraz z cytatami i linkami do źródeł, idealna do weryfikacji informacji.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "NotebookLM",
+    "url": "https://notebooklm.google.com/",
+    "description": "Narzędzie AI od Google, które pozwala na 'rozmowę' z własnymi dokumentami (PDF, Docs), ułatwiając ekstrakcję i analizę informacji ze źródeł.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Google AI Studio",
+    "url": "https://aistudio.google.com/",
+    "description": "Platforma deweloperska Google do tworzenia i testowania zapytań (promptów) dla zaawansowanych modeli AI, takich jak Gemini.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "OpenRouter",
+    "url": "https://openrouter.ai/",
+    "description": "Platforma agregująca dostęp do wielu różnych modeli językowych AI (LLM) poprzez jedno API, umożliwiając porównywanie i wybór najlepszego narzędzia do zadania.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Bolt.new",
+    "url": "https://bolt.new/",
+    "description": "Platforma do szybkiego budowania i wdrażania aplikacji opartych o AI, integrująca różne usługi w jednym miejscu.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Supabase",
+    "url": "https://supabase.com/",
+    "description": "Otwartoźródłowa alternatywa dla Firebase, oferująca bazę danych, autentykację i narzędzia AI do budowy aplikacji.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Lovable",
+    "url": "https://lovable.dev/",
+    "description": "Platforma do tworzenia i zarządzania projektami opartymi na sztucznej inteligencji, od prototypu po wdrożenie.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Hyperbolic",
+    "url": "https://app.hyperbolic.xyz/",
+    "description": "Dashboard AI do monitorowania i zarządzania różnymi zadaniami oraz projektami związanymi z modelami językowymi.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Backflip AI",
+    "url": "https://app.backflip.ai/",
+    "description": "Narzędzie AI do automatyzacji procesów i analizy danych, pomagające w przekształcaniu surowych informacji w użyteczne wnioski.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Project IDX",
+    "url": "https://idx.google.com/",
+    "description": "Oparte na chmurze środowisko programistyczne od Google, integrujące narzędzia AI do wspomagania kodowania i budowy aplikacji.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Notion",
+    "url": "https://www.notion.com/",
+    "description": "Wszechstronna przestrzeń robocza łącząca notatki, bazy danych i zarządzanie projektami, zintegrowana z funkcjami AI.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Make (Integromat)",
+    "url": "https://www.make.com/en/ai-automation",
+    "description": "Platforma do automatyzacji przepływu pracy, która pozwala łączyć różne aplikacje i usługi, w tym narzędzia AI, bez pisania kodu.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Zapier",
+    "url": "https://zapier.com/",
+    "description": "Popularne narzędzie do automatyzacji, które integruje tysiące aplikacji, umożliwiając tworzenie złożonych procesów z wykorzystaniem AI.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Anychat (Hugging Face)",
+    "url": "https://huggingface.co/spaces/akhaliq/anychat",
+    "description": "Platforma na Hugging Face umożliwiająca interakcję z różnymi modelami językowymi AI w jednym interfejsie czatu.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Cerebras",
+    "url": "https://cerebras.ai/",
+    "description": "Firma specjalizująca się w budowie superkomputerów zoptymalizowanych pod kątem treningu dużych modeli AI.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Tempo",
+    "url": "https://app.tempolabs.ai/",
+    "description": "Narzędzie do tworzenia i edycji treści z wykorzystaniem sztucznej inteligencji, ułatwiające pracę z tekstem i danymi.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Grok",
+    "url": "https://x.com/i/grok",
+    "description": "Model językowy AI zintegrowany z platformą X (dawniej Twitter), posiadający dostęp do danych w czasie rzeczywistym.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "p5.js Web Editor",
+    "url": "https://editor.p5js.org/",
+    "description": "Środowisko programistyczne online dla kreatywnego kodowania, często wykorzystywane do wizualizacji danych i eksperymentów z algorytmami AI.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Stitch",
+    "url": "https://stitch.withgoogle.com/",
+    "description": "Eksperymentalne narzędzie od Google, które wykorzystuje AI do projektowania i generowania wzorów, np. dla tkanin.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "LMArena",
+    "url": "https://lmarena.ai/",
+    "description": "Platforma do porównywania i oceniania wydajności różnych modeli językowych AI w bezpośrednich starciach.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "Yupp",
+    "url": "https://yupp.ai/",
+    "description": "Platforma AI do tworzenia i zarządzania treściami, automatyzująca procesy marketingowe i analityczne.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
+  },
+  {
+    "name": "WormGPT (Symulacja)",
+    "url": "https://flowgpt.com/chat/wormgpt-6",
+    "description": "Platforma FlowGPT symulująca działanie modeli AI, w tym kontrowersyjnego WormGPT. Umożliwia testowanie zapytań w różnych scenariuszach w celach badawczych.",
+    "category": "AI Tools",
+    "category_slug": "ai-tools"
   }
 ]
