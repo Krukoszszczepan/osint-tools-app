@@ -1,8 +1,7 @@
 /**
  * @file Skrypt do obsługi interaktywnej bazy narzędzi OSINT.
- * @version 6.1.0
- * @description Wersja premium z płynnymi przejściami, kaskadowymi animacjami kart, debouncingiem wyszukiwania,
- *              kompletną i zoptymalizowaną logiką kategorii oraz ulepszoną wydajnością.
+ * @version 7.0.0
+ * @description Wersja z rozszerzoną bazą danych i zaktualizowanym mapowaniem kategorii, aby poprawnie obsługiwać wszystkie nowe narzędzia.
  */
 document.addEventListener('DOMContentLoaded', function () {
     // --- Elementy DOM ---
@@ -88,13 +87,13 @@ document.addEventListener('DOMContentLoaded', function () {
     })();
 
     function switchView(mode) {
-        dom.toolsContainer.className = `tools-container tools-${mode}`; // Dodajemy klasę bazową
+        dom.toolsContainer.className = `tools-container tools-${mode}`;
         dom.viewGridBtn.classList.toggle('active', mode === 'grid');
         dom.viewListBtn.classList.toggle('active', mode === 'list');
         ls.set('viewMode', mode);
     }
 
-    // --- KOMPLETNA I ZOPTYMALIZOWANA STRUKTURA KATEGORII ---
+    // --- ZAKTUALIZOWANA, KOMPLETNA STRUKTURA KATEGORII ---
     const superCategoryConfig = {
         'osint_domains': { name: 'DZIEDZINY OSINT', icon: 'fas fa-search-location' },
         'technical_analysis': { name: 'ANALIZA TECHNICZNA I CYBERSEC', icon: 'fas fa-shield-virus' },
@@ -180,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'threat-intelligence': { main: 'Wywiad o Zagrożeniach', super: 'technical_analysis' },
         'office-files': { main: 'Analiza Plików Office', super: 'technical_analysis' },
         'pdfs': { main: 'Analiza Plików PDF', super: 'technical_analysis' },
-        'android': { main: 'Analiza Aplikacji Android', super: 'technical_analysis' },
+        'android': { main: 'Android', super: 'technical_analysis' },
         'hosted-automated-analysis': { main: 'Zautomatyzowana Analiza Online', super: 'technical_analysis' },
         'pcaps': { main: 'Analiza Ruchu Sieciowego (PCAP)', super: 'technical_analysis' },
         'analytics': { main: 'Analiza Stron WWW', super: 'technical_analysis' },
@@ -304,11 +303,11 @@ document.addEventListener('DOMContentLoaded', function () {
         'slang': { main: 'Język i Archiwa', super: 'polish_sources' },
         'symbolika': { main: 'Język i Archiwa', super: 'polish_sources' },
         'rejestry-zwierzat': { main: 'Inne Rejestry', super: 'polish_sources' },
-        'przechowywanie': { main: 'Inne', super: 'polish_sources' },
-        'wklejki': { main: 'Inne', super: 'polish_sources' },
-        'kamery': { main: 'Inne', super: 'polish_sources' },
-        'narzedzia': { main: 'Inne', super: 'polish_sources' },
-        'platformy-sledcze': { main: 'Inne', super: 'polish_sources' },
+        'przechowywanie': { main: 'Przechowywanie Plików', super: 'analyst_workshop' },
+        'wklejki': { main: 'Pastebiny', super: 'analyst_workshop' },
+        'kamery': { main: 'Kamery Internetowe', super: 'polish_sources' },
+        'narzedzia': { main: 'Inne Narzędzia', super: 'analyst_workshop' },
+        'platformy-sledcze': { main: 'Platformy Śledcze', super: 'analyst_workshop' },
         'linki-do-profili': { main: 'Dane Osobowe i Rejestry', super: 'polish_sources' },
         'classifieds': { main: 'Ogłoszenia i Handel', super: 'osint_domains' },
         'social-networking': { main: 'Sieci Społecznościowe', super: 'osint_domains' },
@@ -325,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function () {
         'wyszukiwanie': { main: 'Wyszukiwarki Mediów', super: 'osint_domains' },
         'analiza': { main: 'Analiza Wideo', super: 'osint_domains' },
         'wideo': { main: 'Wideo', super: 'osint_domains' },
-        'paste-sites': { main: 'Serwisy typu Pastebin', super: 'analyst_workshop' },
+        'paste-sites': { main: 'Pastebiny', super: 'analyst_workshop' },
         'profile': { main: 'Analiza Profili', super: 'osint_domains' },
         'hashtag': { main: 'Analiza Hashtagów', super: 'osint_domains' },
         'archive--deleted-tweets': { main: 'Archiwum Tweetów', super: 'osint_domains' },
@@ -340,7 +339,16 @@ document.addEventListener('DOMContentLoaded', function () {
         'kik': { main: 'Kik', super: 'osint_domains' },
         'yikyak': { main: 'Yik Yak', super: 'osint_domains' },
         'international': { main: 'Numery Międzynarodowe', super: 'osint_domains' },
-        'generatory-danych--tozsamosci': { main: 'Tworzenie Person', super: 'analyst_workshop' }
+        'generatory-danych--tozsamosci': { main: 'Tworzenie Person', super: 'analyst_workshop' },
+        // NOWE KATEGORIE Z "AWESOME-LINKS"
+        'app-mods': { main: 'Modyfikacje Aplikacji', super: 'analyst_workshop' },
+        'media-utilities': { main: 'Narzędzia Mediowe', super: 'analyst_workshop' },
+        'discord': { main: 'Discord', super: 'osint_domains' },
+        'awesome-lists': { main: 'Listy "Awesome"', super: 'analyst_workshop' },
+        'warez-scene': { main: 'Scena Warez', super: 'technical_analysis' },
+        'system-tools': { main: 'Narzędzia Systemowe', super: 'analyst_workshop' },
+        'file-search': { main: 'Wyszukiwarki Plików', super: 'analyst_workshop' },
+        'iptv-radio': { main: 'IPTV i Radio', super: 'osint_domains' }
     };
     
     // --- FUNKCJE RENDERUJĄCE ---
@@ -513,10 +521,6 @@ document.addEventListener('DOMContentLoaded', function () {
         renderContent();
     }
     
-    /**
-     * Płynnie aktualizuje kontener z narzędziami.
-     * @param {function} updateFunction - Funkcja, która generuje nowy HTML.
-     */
     function updateToolContainer(updateFunction) {
         clearTimeout(currentRenderTimeout);
         dom.toolsContainer.classList.add('fade-out');
@@ -524,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentRenderTimeout = setTimeout(() => {
             updateFunction();
             dom.toolsContainer.classList.remove('fade-out');
-        }, 150); // Czas musi pasować do transition w CSS
+        }, 150);
     }
 
     function renderContent() {
