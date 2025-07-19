@@ -1,8 +1,8 @@
 /**
  * @file Skrypt do obsługi podstrony "Baza Wiedzy o Zagrożeniach".
- * @version 1.0.0
- * @description Dynamicznie buduje menu nawigacyjne i wczytuje artykuły
- *              z plików Markdown.
+ * @version 2.0.0
+ * @description Dynamicznie buduje menu, wczytuje artykuły, generuje spis treści,
+ *              obsługuje wskaźnik postępu czytania i podświetlanie aktywnej sekcji.
  */
 document.addEventListener('DOMContentLoaded', function () {
     // --- Elementy DOM ---
@@ -14,7 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
         articleContainer: document.getElementById('article-content-container'),
         pageTitle: document.getElementById('page-title'),
         body: document.body,
+        progressBar: document.getElementById('reading-progress-bar'),
+        tocContainer: document.getElementById('toc-container'),
     };
+
+    let intersectionObserver;
 
     // --- Inicjalizacja podstawowych funkcji ---
     (() => {
@@ -27,12 +31,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         
         dom.mobileMenuBtn.addEventListener('click', () => dom.sidebar.classList.toggle('is-open'));
+
+        window.addEventListener('scroll', updateReadingProgress);
     })();
 
     /**
-     * Rekursywnie buduje menu w panelu bocznym na podstawie struktury JSON.
+     * Rekursywnie buduje menu w panelu bocznym.
      * @param {object} item - Obiekt węzła z pliku threats.json.
-     * @returns {HTMLElement} Element <li> z linkiem lub zagnieżdżoną listą.
+     * @returns {HTMLElement} Element DOM węzła.
      */
     function buildMenuItem(item) {
         const node = document.createElement('div');
@@ -44,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const iconHTML = item.icon ? `<i class="${item.icon}" aria-hidden="true"></i>` : '';
         
-        if (item.children) { // To jest kategoria z podkategoriami
+        if (item.children) {
             content.classList.add('is-expandable');
             content.innerHTML = `<i class="fas fa-angle-right" aria-hidden="true"></i><span>${iconHTML}${item.name}</span>`;
             
@@ -52,10 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             childrenContainer.className = 'node-children';
             const innerDiv = document.createElement('div');
             
-            item.children
-                .sort((a,b) => a.name.localeCompare(b.name))
-                .forEach(child => innerDiv.appendChild(buildMenuItem(child)));
-
+            item.children.sort((a,b) => a.name.localeCompare(b.name)).forEach(child => innerDiv.appendChild(buildMenuItem(child)));
             childrenContainer.appendChild(innerDiv);
             node.appendChild(childrenContainer);
 
@@ -63,8 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.stopPropagation();
                 node.classList.toggle('is-expanded');
             });
-
-        } else { // To jest link do artykułu
+        } else {
             content.innerHTML = `<span>${iconHTML}${item.name}</span>`;
             content.dataset.file = item.file;
             content.dataset.title = item.name;
@@ -73,10 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return node;
     }
     
-    /**
-     * Obsługuje kliknięcie na link artykułu w menu.
-     * @param {Event} event 
-     */
     function handleArticleSelection(event) {
         event.stopPropagation();
         const target = event.currentTarget;
@@ -94,26 +92,110 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     /**
-     * Wczytuje i wyświetla treść artykułu z pliku Markdown.
+     * Wczytuje i wyświetla treść artykułu, a następnie generuje spis treści.
      * @param {string} fileSlug - Nazwa pliku .md bez rozszerzenia.
      * @param {string} title - Tytuł do wyświetlenia w nagłówku.
      */
     async function displayArticle(fileSlug, title) {
         dom.pageTitle.textContent = title;
         dom.articleContainer.innerHTML = '<div class="loading-indicator"><div class="spinner"></div></div>';
+        dom.tocContainer.innerHTML = ''; // Wyczyść stary spis treści
         
         try {
             const response = await fetch(`threats/${fileSlug}.md`);
             if (!response.ok) throw new Error(`Nie można załadować pliku: ${fileSlug}.md`);
             const markdown = await response.text();
             
-            // Używamy biblioteki 'marked' załadowanej w index.html
             dom.articleContainer.innerHTML = marked.parse(markdown);
+
+            generateTableOfContents();
+            updateReadingProgress(); // Zaktualizuj pasek po wczytaniu nowej treści
 
         } catch (error) {
             console.error("Błąd ładowania artykułu:", error);
-            dom.articleContainer.innerHTML = `<p>Wystąpił błąd. Artykuł nie mógł zostać załadowany. Sprawdź konsolę, aby uzyskać więcej informacji.</p>`;
+            dom.articleContainer.innerHTML = `<p>Wystąpił błąd. Artykuł nie mógł zostać załadowany.</p>`;
         }
+    }
+
+    /**
+     * Generuje dynamiczny spis treści na podstawie nagłówków w artykule.
+     */
+    function generateTableOfContents() {
+        const headings = dom.articleContainer.querySelectorAll('h2, h3');
+        if (headings.length < 2) {
+            dom.tocContainer.innerHTML = '';
+            return;
+        }
+
+        // Czyszczenie starych ID i obserwatorów
+        if (intersectionObserver) intersectionObserver.disconnect();
+        
+        const tocList = document.createElement('ul');
+        let headingIndex = 0;
+
+        headings.forEach(heading => {
+            const id = `toc-heading-${headingIndex++}`;
+            heading.id = id;
+
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `#${id}`;
+            a.textContent = heading.textContent;
+            a.classList.add(heading.tagName.toLowerCase() === 'h3' ? 'toc-h3' : 'toc-h2');
+            a.dataset.targetId = id;
+            
+            li.appendChild(a);
+            tocList.appendChild(li);
+        });
+
+        const tocHeader = document.createElement('h4');
+        tocHeader.textContent = 'Spis Treści';
+        dom.tocContainer.innerHTML = '';
+        dom.tocContainer.appendChild(tocHeader);
+        dom.tocContainer.appendChild(tocList);
+
+        setupIntersectionObserver();
+    }
+
+    /**
+     * Ustawia Intersection Observer do śledzenia widocznych nagłówków.
+     */
+    function setupIntersectionObserver() {
+        const tocLinks = dom.tocContainer.querySelectorAll('a');
+        const headings = dom.articleContainer.querySelectorAll('h2, h3');
+
+        const observerOptions = {
+            rootMargin: '-50px 0px -50% 0px',
+            threshold: 0
+        };
+
+        intersectionObserver = new IntersectionObserver((entries) => {
+            tocLinks.forEach(link => link.classList.remove('active-toc-link'));
+
+            const visibleEntries = entries.filter(entry => entry.isIntersecting);
+            if (visibleEntries.length > 0) {
+                const targetId = visibleEntries[0].target.id;
+                const activeLink = dom.tocContainer.querySelector(`a[data-target-id="${targetId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active-toc-link');
+                }
+            }
+        }, observerOptions);
+
+        headings.forEach(heading => intersectionObserver.observe(heading));
+    }
+    
+    /**
+     * Aktualizuje szerokość paska postępu czytania.
+     */
+    function updateReadingProgress() {
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        if (scrollHeight <= clientHeight) {
+            dom.progressBar.style.width = '0%';
+            return;
+        }
+        const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
+        dom.progressBar.style.width = `${scrollPercent}%`;
     }
 
     /**
@@ -125,15 +207,13 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!response.ok) throw new Error('Błąd ładowania spisu treści Bazy Wiedzy.');
             const menuData = await response.json();
             
-            dom.menuRoot.innerHTML = ''; // Wyczyść placeholder
+            dom.menuRoot.innerHTML = '';
             menuData.children
                 .sort((a,b) => a.name.localeCompare(b.name))
                 .forEach(item => {
-                    const menuItem = buildMenuItem(item);
-                    dom.menuRoot.appendChild(menuItem);
+                    dom.menuRoot.appendChild(buildMenuItem(item));
             });
             
-            // Domyślnie wczytaj pierwszy artykuł
             const firstArticleNode = dom.menuRoot.querySelector('[data-file]');
             if (firstArticleNode) {
                 firstArticleNode.classList.add('is-active');
@@ -142,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         } catch (error) {
             console.error(error);
-            dom.articleContainer.innerHTML = `<p>Nie udało się załadować struktury Bazy Wiedzy. Sprawdź, czy plik threats/threats.json istnieje i ma poprawną strukturę.</p>`;
+            dom.articleContainer.innerHTML = `<p>Nie udało się załadować struktury Bazy Wiedzy.</p>`;
         }
     }
 
