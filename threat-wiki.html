@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baza Wiedzy o Zagrożeniach - OSINT Toolbox</title>
+    
+    <meta name="description" content="Kompendium wiedzy na temat cyberzagrożeń. Przeglądaj kategorie takie jak ransomware, phishing, wektory ataków i techniki dochodzeniowe.">
+    <meta name="author" content="Bartosz S.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><path fill=%22%23ef4444%22 d=%22M256 0c-17.7 0-32 14.3-32 32V416c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32zM128 128c-17.7 0-32 14.3-32 32V416c0 17.7 14.3 32 32 32s32-14.3 32-32V160c0-17.7-14.3-32-32-32zM384 224c-17.7 0-32 14.3-32 32V416c0 17.7 14.3 32 32 32s32-14.3 32-32V256c0-17.7-14.3-32-32-32z%22/></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-book"></i> Kategorie Wiedzy</h3>
+        </div>
+        <div class="sidebar-nav-links">
+            <a href="index.html" class="nav-link"><i class="fas fa-tools"></i> Baza Narzędzi OSINT</a>
+            <a href="threat-wiki.html" class="nav-link active"><i class="fas fa-shield-virus"></i> Baza Wiedzy o Zagrożeniach</a>
+        </div>
+        <hr class="sidebar-separator">
+        <div id="threat-menu-root" class="mindmap-root">
+            <!-- Menu bazy wiedzy generowane przez JavaScript -->
+        </div>
+    </aside>
+
+    <div class="main-content">
+        <header class="main-header">
+            <div class="header-container">
+                <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Otwórz menu kategorii">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div id="page-title-container">
+                    <h1 id="page-title">Baza Wiedzy o Zagrożeniach</h1>
+                </div>
+                <button id="theme-switcher" class="theme-btn" aria-label="Zmień motyw">
+                    <i class="fas fa-sun"></i>
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <main id="content-area" class="content-area">
+            <article id="article-content-container" class="article-content">
+                <!-- Treść artykułu będzie tutaj wczytywana -->
+            </article>
+        </main>
+
+        <footer class="main-footer">
+            <p class="copyright-text">© 2024 OSINT Toolbox by Bartosz S. Wszelkie prawa zastrzeżone.</p>
+        </footer>
+    </div>
+    
+    <!-- Biblioteka do konwersji Markdown na HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Nowy skrypt dla tej podstrony -->
+    <script src="threat-wiki.js" defer></script>
+
+</body>
+</html>

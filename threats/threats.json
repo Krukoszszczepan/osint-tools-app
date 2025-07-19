@@ -1,0 +1,67 @@
+{
+  "name": "Baza Wiedzy",
+  "children": [
+    {
+      "name": "Rodzaje Zagrożeń",
+      "icon": "fas fa-bug",
+      "children": [
+        {
+          "name": "Malware",
+          "children": [
+            { "name": "Ransomware", "file": "ransomware-wprowadzenie" },
+            { "name": "Wirusy i Robaki", "file": "wirusy-robaki" },
+            { "name": "Trojany", "file": "trojany" },
+            { "name": "Spyware i Adware", "file": "spyware-adware" }
+          ]
+        },
+        {
+          "name": "Ataki Sieciowe",
+          "children": [
+            { "name": "Phishing", "file": "phishing" },
+            { "name": "DDoS", "file": "ddos" },
+            { "name": "Man-in-the-Middle (MitM)", "file": "mitm" }
+          ]
+        },
+        {
+          "name": "Inżynieria Społeczna",
+          "file": "inzynieria-spoleczna"
+        },
+        {
+          "name": "Najpopularniejsze Ataki",
+          "file": "popularne-ataki-historia"
+        }
+      ]
+    },
+    {
+      "name": "Wektory Ataków",
+      "icon": "fas fa-route",
+      "children": [
+        { "name": "E-mail i Załączniki", "file": "wektor-email" },
+        { "name": "Nośniki USB", "file": "wektor-usb" },
+        { "name": "Słabe Hasła", "file": "wektor-hasla" },
+        { "name": "Niezabezpieczone Sieci Wi-Fi", "file": "wektor-wifi" }
+      ]
+    },
+    {
+      "name": "Dochodzenie i Reakcja",
+      "icon": "fas fa-user-secret",
+      "children": [
+        {
+          "name": "Postępowanie w Incydencie",
+          "children": [
+            { "name": "Co robić w przypadku ataku?", "file": "reakcja-na-atak" },
+            { "name": "Zabezpieczanie Miejsca Zdarzenia", "file": "zabezpieczenie-miejsca" }
+          ]
+        },
+        {
+          "name": "Dochodzenie Policyjne",
+          "children": [
+            { "name": "Zbieranie Dowodów Cyfrowych", "file": "dowody-cyfrowe" },
+            { "name": "Analiza Logów Systemowych", "file": "analiza-logow" },
+            { "name": "Narzędzia Śledcze", "file": "narzedzia-sledcze" }
+          ]
+        }
+      ]
+    }
+  ]
+}
