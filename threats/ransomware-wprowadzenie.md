@@ -1,5 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" class="logo" width="120"/>
-
 # Ransomware: Kompleksowy przewodnik po największym zagrożeniu cyfrowej epoki
 
 Ransomware stanowi obecnie jedno z najpoważniejszych cyberzagrożeń dla organizacji na całym świecie. To złośliwe oprogramowanie, które **szyfruje dane ofiary i żąda okupu** za ich odzyskanie, ewoluowało z prostych programów blokujących dostęp do komputera w wyrafinowane narzędzie cyberprzestępczości[1][2]. Jego wpływ na gospodarkę światową i społeczeństwo jest ogromny - ataki ransomware generują **straty sięgające miliardów dolarów** rocznie i mogą całkowicie sparaliżować działalność organizacji[3][4].
