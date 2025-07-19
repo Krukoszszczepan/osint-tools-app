@@ -8,7 +8,11 @@
         {
           "name": "Malware",
           "children": [
-            { "name": "Ransomware", "file": "ransomware-wprowadzenie" },
+            { 
+              "name": "Ransomware", 
+              "file": "ransomware-wprowadzenie",
+              "audioFile": "ransomware-wprowadzenie.mp3"
+            },
             { "name": "Wirusy i Robaki", "file": "wirusy-robaki" },
             { "name": "Trojany", "file": "trojany" },
             { "name": "Spyware i Adware", "file": "spyware-adware" }
