@@ -46,6 +46,13 @@
                 <i class="fas fa-dice"></i>
             </button>
         </div>
+
+        <div class="sidebar-nav-links">
+            <a href="index.html" class="nav-link active"><i class="fas fa-tools"></i> Baza Narzędzi OSINT</a>
+            <a href="threat-wiki.html" class="nav-link"><i class="fas fa-shield-virus"></i> Baza Wiedzy o Zagrożeniach</a>
+        </div>
+        <hr class="sidebar-separator">
+
         <div id="mindmap-root" class="mindmap-root">
             <!-- Mapa myśli generowana przez JavaScript -->
         </div>
@@ -60,7 +67,7 @@
                 </button>
                 <div class="search-box">
                     <i class="fas fa-search" aria-hidden="true"></i>
-                    <input type="text" id="searchInput" placeholder="Szukaj w ponad 1600 narzędziach..." aria-label="Wyszukiwarka narzędzi">
+                    <input type="text" id="searchInput" placeholder="Szukaj w ponad 1800 narzędziach..." aria-label="Wyszukiwarka narzędzi">
                 </div>
                 <button id="theme-switcher" class="theme-btn" aria-label="Zmień motyw">
                     <i class="fas fa-sun"></i>
@@ -70,27 +77,51 @@
         </header>
 
         <main id="content-area" class="content-area">
-            <div class="content-header">
-                <h1 id="current-category-title">Wczytywanie...</h1>
-                <div class="header-controls">
-                    <span id="tool-count" class="tool-count" aria-live="polite"></span>
-                    <div class="view-switcher" role="group" aria-label="Przełącznik widoku">
-                        <button id="view-grid-btn" class="view-btn active" title="Widok siatki" aria-pressed="true"><i class="fas fa-th-large"></i></button>
-                        <button id="view-list-btn" class="view-btn" title="Widok listy" aria-pressed="false"><i class="fas fa-th-list"></i></button>
+            <!-- Widok Narzędzi -->
+            <div id="tools-view">
+                <div class="content-header">
+                    <h1 id="current-category-title">Wczytywanie...</h1>
+                    <div class="header-controls">
+                        <span id="tool-count" class="tool-count" aria-live="polite"></span>
+                        <div class="view-switcher" role="group" aria-label="Przełącznik widoku">
+                            <button id="view-grid-btn" class="view-btn active" title="Widok siatki" aria-pressed="true"><i class="fas fa-th-large"></i></button>
+                            <button id="view-list-btn" class="view-btn" title="Widok listy" aria-pressed="false"><i class="fas fa-th-list"></i></button>
+                        </div>
                     </div>
                 </div>
+                <section id="tools-container" class="tools-container tools-grid">
+                    <div class="loading-indicator">
+                        <div class="spinner"></div>
+                        <p>Wczytywanie bazy narzędzi...</p>
+                    </div>
+                </section>
             </div>
-            <section id="tools-container" class="tools-grid">
-                <!-- Wskaźnik ładowania, zostanie zastąpiony przez JS -->
-                <div class="loading-indicator">
-                    <div class="spinner"></div>
-                    <p>Wczytywanie bazy narzędzi...</p>
+    
+            <!-- Widok Bazy Wiedzy (ukryty na tej stronie) -->
+            <div id="knowledge-base-view" class="hidden">
+                <div class="content-header">
+                    <h1>Baza Wiedzy</h1>
+                    <button id="kb-back-btn" class="kb-back-button"><i class="fas fa-arrow-left"></i> Wróć do listy</button>
                 </div>
-            </section>
+                <div id="kb-article-list"></div>
+                <article id="kb-article-content" class="article-content"></article>
+            </div>
         </main>
 
         <footer class="main-footer">
-            <p>© 2024 OSINT Toolbox by Bartosz S. Wszelkie prawa zastrzeżone.</p>
+            <div class="visitor-stats">
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Łącznie wizyt:</span>
+                    <span id="total-visits"><i class="fas fa-spinner fa-spin"></i></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>Online:</span>
+                    <a href='https://onlineusers.net' id='online-users-placeholder' title='Online Users Counter'><img src='https://onlineusers.net/images/logo.png' alt='Online Users Counter' style='border:none;display:none;' /></a>
+                </div>
+            </div>
+            <p class="copyright-text">© 2024 OSINT Toolbox by Bartosz S. Wszelkie prawa zastrzeżone.</p>
         </footer>
     </div>
 
@@ -105,7 +136,7 @@
     </div>
     
     <!-- Banner z informacją o ciasteczkach -->
-    <div id="cookie-consent-banner" class="cookie-banner hidden">
+    <div id="cookie-consent-banner" class="cookie-banner">
         <div class="cookie-content">
             <p>
                 Używamy plików cookie, aby ulepszyć Twoje doświadczenie. Przechowujemy Twoje preferencje, takie jak ulubione narzędzia, oceny czy wybrany motyw. Kontynuując, zgadzasz się na ich użycie.
@@ -113,6 +144,9 @@
             <button id="cookie-accept-btn" class="cookie-accept-button">Rozumiem</button>
         </div>
     </div>
+
+    <!-- Skrypt licznika osób online -->
+    <script type='text/javascript' src='https://cdn.onlineusers.net/onlinewebsiteusers.php?id=YOUR_UNIQUE_ID'></script> <!-- <<< PAMIĘTAJ O ZMIANIE ID -->
 
     <!--Start of Tawk.to Script-->
     <script type="text/javascript">
@@ -128,7 +162,10 @@
     </script>
     <!--End of Tawk.to Script-->
 
-    <!-- Główny skrypt aplikacji - atrybut 'defer' poprawia wydajność ładowania -->
+    <!-- Biblioteka do konwersji Markdown na HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Główny skrypt aplikacji -->
     <script src="script.js" defer></script>
 </body>
 </html>
